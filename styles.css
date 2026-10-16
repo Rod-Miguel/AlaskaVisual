@@ -198,8 +198,8 @@ header {
 #logout-button {
     height: 34px;
     text-transform: uppercase;
-    background-color: var(--color-grey-olive);
-    color: var(--bg-main);
+    background-color: var(--bg-main);
+    color: var(--text-primary);
     border: none;
     border-radius: var(--radius-pill);
     padding: 0 0.9rem;
