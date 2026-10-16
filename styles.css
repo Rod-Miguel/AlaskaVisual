@@ -1,0 +1,277 @@
+/*CSS RESET (Elimina los márgenes del navegador)*/
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    /* Asegura que el padding no desborde el ancho */
+}
+
+/*VARIABLES GLOBALES (Design Tokens - Tu Paleta)*/
+:root {
+    --color-platinum: #ebebeb;
+    /* Blanco/Gris Platinado (Superficies/Fondos claros) */
+    --color-grey-olive: #8f8f8f;
+    /* Gris Oliva (Bordes, textos secundarios, iconos) */
+    --color-onyx: #141414;
+    /* Ónix/Casi Negro (Textos contrastados, fondos oscuros) */
+    --color-royal-gold: #fcdc5f;
+    /* Dorado Real (Acento, métricas clave, destaques) */
+    --color-blue: #311fff;
+    /* Azul Eléctrico (Botones de acción, enlaces, hovers) */
+
+    /* ASIGNACIÓN DE ROLES (Modo Claro por Defecto) */
+    --bg-main: var(--color-grey-olive);
+    --bg-card: #ffffff;
+    --bg-header: #ffffff;
+
+    --text-primary: var(--color-onyx);
+    --text-secondary: var(--color-grey-olive);
+    --border-color: rgba(143, 143, 143, 0.25);
+    /* Grey-olive con transparencia */
+
+    /* Botones y Acentos */
+    --accent-primary: var(--color-blue);
+    --accent-text: #ffffff;
+    --accent-hover: #2616d4;
+    --accent-highlight: var(--color-royal-gold);
+    /* Para destacar el total ganado o promedios */
+
+    /* Bordes Redondeados (Pill Buttons) */
+    --radius-card: 12px;
+    --radius-pill: 9999px;
+
+    /* FAMILIAS TIPOGRÁFICAS */
+    --font-primary: 'Cambay', sans-serif;
+    /* Para textos, tablas e interfaces */
+    --font-heading: 'Inter', sans-serif;
+    /* Para el logo, títulos principales y UI de botones */
+}
+
+/*ASIGNACIÓN DE ROLES (Modo Oscuro)*/
+[data-theme="dark"] {
+    --bg-main: var(--color-onyx);
+    --bg-card: #1f1f1f;
+    --bg-header: #1f1f1f;
+
+    --text-primary: var(--color-platinum);
+    --text-secondary: var(--color-grey-olive);
+    --border-color: rgba(235, 235, 235, 0.12);
+
+    --accent-primary: var(--color-royal-gold);
+    --accent-text: var(--color-onyx);
+    --accent-hover: #e0c345;
+}
+
+/*ESTILOS GLOBALES DE LA PÁGINA*/
+body {
+    background-color: var(--bg-main);
+    font-family: var(--font-primary);
+    font-weight: 400;
+    -webkit-font-smoothing: antialiased;
+    /* Renderizado de fuentes más nítido en pantallas HD */
+}
+
+/*Reset de márgenes y alturas de línea para encabezados*/
+#brand h1,#brand h2,#login h3 {
+    margin: 0;
+    line-height: 1;
+}
+
+/*HEADER (Navegación Compacta y Alineada)*/
+header {
+    background-color: var(--bg-header);
+    color: var(--text-primary);
+    padding: 0 2rem;
+    height: 64px;
+
+    border-bottom: 1px solid var(--border-color);
+
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+}
+
+/*BLOQUE IZQUIERDO: BRANDING / LOGO*/
+#brand {
+    font-family: var(--font-heading);
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 0.75rem;
+}
+#logo {
+    width: 32px;
+    height: 32px;
+    background-color: var(--color-onyx);
+    color: var(--accent-text);
+    border-radius: 8px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    font-family: var(--font-heading);
+    font-size: 1rem;
+
+    font-weight: 700;
+    line-height: 1;
+    text-transform: uppercase;
+}
+
+#logotipo {
+    font-family: var(--font-heading);
+    font-size: 1.05rem;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    color: var(--text-primary);
+}
+
+/*BLOQUE CENTRO: CÁPSULA DE NAVEGACIÓN (#NAV)*/
+#nav {
+    background-color: var(--color-grey-olive);
+    border-radius: var(--radius-pill);
+
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 0.25rem;
+    padding: 0.25rem;
+}
+
+#nav a {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 1;
+    margin: 0;
+
+    text-decoration: none;
+    text-transform: capitalize;
+
+    color: var(--text-primary);
+    font-family: var(--font-heading);
+    font-size: 0.85rem;
+
+    font-weight: 500;
+
+    padding: 0.45rem 1.1rem;
+    border-radius: var(--radius-pill);
+    transition: all 0.2s ease;
+}
+
+#nav a:hover {
+    background-color: var(--color-platinum);
+    color: var(--color-onyx);
+}
+
+#nav a.active {
+    background-color: var(--color-platinum);
+    color: var(--color-onyx);
+    font-weight: 600;
+}
+
+/*BLOQUE DERECHO: USUARIO Y BOTÓN*/
+#login {
+    font-family: var(--font-heading);
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+#avatar-display {
+    text-transform: uppercase;
+    background-color: var(--color-platinum);
+    color: var(--color-onyx);
+    border: 1px solid var(--border-color);
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    font-family: var(--font-heading);
+    font-size: 0.8rem;
+    font-weight: 700;
+    line-height: 1;
+}
+
+#logout-button {
+    height: 34px;
+    text-transform: uppercase;
+    background-color: var(--color-grey-olive);
+    color: var(--color-onyx);
+    border: none;
+    border-radius: var(--radius-pill);
+    padding: 0 0.9rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    font-family: var(--font-heading);
+    font-size: 0.8rem;
+    font-weight: 600;
+}
+
+#logout-button:hover {
+    background-color: #2a2a2a;
+    color: var(--color-platinum);
+}
+/* Pantallas pequeñas (Celulares: menor a 768px) */
+@media (max-width: 768px) {
+    header {
+        height: auto;               /* Permite que el header crezca verticalmente */
+        padding: 0.85rem 1rem;       /* Reducimos el padding lateral */
+        flex-direction: column;      /* Apilamos los bloques en columna */
+        gap: 0.75rem;
+    }
+
+    /* Ocultamos el texto secundario del logo en móviles si el espacio es muy reducido */
+    #logotipo {
+        font-size: 0.95rem;
+    }
+
+    /* La cápsula de navegación ocupa el ancho máximo en pantallas chicas */
+    #nav {
+        width: 100%;
+        justify-content: space-around;
+    }
+
+    #nav a {
+        padding: 0.4rem 0.75rem;     /* Reducimos el relleno de las píldoras */
+        font-size: 0.8rem;
+    }
+
+    #login {
+        width: 100%;
+        justify-content: center;     /* Centramos la sección de usuario */
+    }
+}
+/*CONTENEDOR PRINCIPAL (<MAIN>)*/
+main {
+    flex: 1;
+    padding: 1.5rem 2rem;
+    max-width: 1300px;
+    width: 100%;
+    margin: 0 auto;
+}
+
+/*ESTADO DE LAS SECCIONES (SPA)*/
+.view-section {
+    display: none; /* Oculta las secciones inactivas por defecto */
+    width: 100%;
+    height: 100%;
+}
+
+.view-section.active {
+    display: flex; /* Muestra solo la sección que tiene la clase .active */
+    flex-direction: column;
+    gap: 1.25rem;
+}

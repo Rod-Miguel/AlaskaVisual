@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Delivery Analytics Dashboard</title>
+
+    <!-- Conexiones previas para acelerar la descarga desde los servidores de Google -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <!-- Importación correcta de Cambay e Inter con sus pesos especificados (Regular, Medium, Semibold, Bold) -->
+    <link href="https://fonts.googleapis.com/css2?family=Cambay:wght@400;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- HEADER CON NAVEGACIÓN SPA Y DENSIDAD COMPACTA -->
+    <header>
+        <!-- 1. Marca / Logo -->
+        <div id="brand">
+            <h1 id="logo">D</h1>
+            <h2 id="logotipo">delivery analytics</h2>
+        </div>
+
+        <!-- 2. Navegación Principal (Filtros de Vista / Píldora) -->
+        <nav id="nav">
+            <a href="#dia" class="active">Día</a>
+            <a href="#semana">Semana</a>
+            <a href="#mes">Mes</a>
+        </nav>
+
+        <!-- 3. Área de Usuario / Login -->
+        <div id="login">
+            <div id="avatar-display">MR</div>
+            <button id="logout-button">Usuario</button>
+        </div>
+    </header>
+    <main>
+<section id="view-day" class="view-section active">
+    
+<div class="metric-grid">
+    <div class="metric-card">
+        <h3 class="metric-title">Pedidos</h3>
+        <p class="metric-value">1,234</p>
+        <span class="metric-change">+5% desde ayer</span>
+    </div>
+    <div class="metric-card">
+        <h3 class="metric-title">Ingresos</h3>
+        <p class="metric-value">$12,345</p>
+        <span class="metric-change">Cliente + local</span>  
+    </div>
+    <div class="metric-card">
+        <h3 class="metric-title">Promedio Dia</h3>
+        <p class="metric-value">5.13$</p>
+        <span class="metric-change">Promedio</span>
+    </div>
+    <div class="metric-card">
+        <h3 class="metric-title">Promedio Semana</h3>
+        <p class="metric-value">5.13$</p>
+        <span class="metric-change">Acumulado(2dias)</span>
+    </div>
+
+</section>
+<section id="view-week" class="view-section">
+</section>
+<section id="view-month" class="view-section">
+</section>
+    </main>
+</body>
+</html>
+
