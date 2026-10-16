@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -10,10 +11,13 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 
     <!-- Importación correcta de Cambay e Inter con sus pesos especificados (Regular, Medium, Semibold, Bold) -->
-    <link href="https://fonts.googleapis.com/css2?family=Cambay:wght@400;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    
+    <link
+        href="https://fonts.googleapis.com/css2?family=Cambay:wght@400;700&family=Inter:wght@400;500;600;700&display=swap"
+        rel="stylesheet">
+
     <link rel="stylesheet" href="styles.css">
 </head>
+
 <body>
     <!-- HEADER CON NAVEGACIÓN SPA Y DENSIDAD COMPACTA -->
     <header>
@@ -37,36 +41,50 @@
         </div>
     </header>
     <main>
-<section id="view-day" class="view-section active">
-    
-<div class="metric-grid">
-    <div class="metric-card">
-        <h3 class="metric-title">Pedidos</h3>
-        <p class="metric-value">1,234</p>
-        <span class="metric-change">+5% desde ayer</span>
-    </div>
-    <div class="metric-card">
-        <h3 class="metric-title">Ingresos</h3>
-        <p class="metric-value">$12,345</p>
-        <span class="metric-change">Cliente + local</span>  
-    </div>
-    <div class="metric-card">
-        <h3 class="metric-title">Promedio Dia</h3>
-        <p class="metric-value">5.13$</p>
-        <span class="metric-change">Promedio</span>
-    </div>
-    <div class="metric-card">
-        <h3 class="metric-title">Promedio Semana</h3>
-        <p class="metric-value">5.13$</p>
-        <span class="metric-change">Acumulado(2dias)</span>
-    </div>
+        <!-- SECCIONES DE VISTA DE DÍA, SEMANA Y MES CON MÉTRICAS Y ESTILOS DE TARJETA -->
 
-</section>
-<section id="view-week" class="view-section">
-</section>
-<section id="view-month" class="view-section">
-</section>
+        <!-- SECCION DIA  -->
+        <section id="view-day" class="view-section active">
+
+            <!-- GRID DE MÉTRICAS -->
+            <div class="metric-grid">
+                <div class="metric-card">
+                    <h3 class="metric-title">Pedidos</h3>
+                    <p class="metric-value">6</p>
+                    <span class="metric-change status-success">+2 desde ayer</span>
+                </div>
+
+                <!-- CARD DE MÉTRICA DE INGRESOS -->
+                <div class="metric-card">
+                    <h3 class="metric-title">Ingresos</h3>
+                    <p class="metric-value">$12</p>
+                    <span class="metric-change status-neutral">Cliente + local</span>
+                </div>
+
+                <!-- CARD DE MÉTRICA DE PROMEDIO DIA -->
+                <div class="metric-card">
+                    <h3 class="metric-title">Promedio Dia</h3>
+                    <p class="metric-value">5.13$</p>
+                    <span class="metric-change status-danger">Promedio</span>
+                </div>
+
+                <!-- CARD DE MÉTRICA DE PROMEDIO SEMANA -->
+                <div class="metric-card">
+                    <h3 class="metric-title">Promedio Semana</h3>
+                    <p class="metric-value">5.13$</p>
+                    <span class="metric-change status-neutral">Acumulado(2dias)</span>
+                </div>
+
+        </section>
+
+        <!-- SECCION SEMANA -->
+        <section id="view-week" class="view-section">
+        </section>
+
+        <!-- SECCION MES -->
+        <section id="view-month" class="view-section">
+        </section>
     </main>
 </body>
-</html>
 
+</html>

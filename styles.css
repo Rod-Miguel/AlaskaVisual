@@ -1,5 +1,5 @@
 /*CSS RESET (Elimina los márgenes del navegador)*/
-*{
+* {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
@@ -72,7 +72,9 @@ body {
 }
 
 /*Reset de márgenes y alturas de línea para encabezados*/
-#brand h1,#brand h2,#login h3 {
+#brand h1,
+#brand h2,
+#login h3 {
     margin: 0;
     line-height: 1;
 }
@@ -100,6 +102,7 @@ header {
     align-items: center;
     gap: 0.75rem;
 }
+
 #logo {
     width: 32px;
     height: 32px;
@@ -224,12 +227,104 @@ header {
     background-color: #2a2a2a;
     color: var(--color-platinum);
 }
-/* Pantallas pequeñas (Celulares: menor a 768px) */
+
+/*CONTENEDOR PRINCIPAL (<MAIN>)*/
+main {
+    flex: 1;
+    padding: 1.5rem 2rem;
+    max-width: 1300px;
+    width: 100%;
+    margin: 0 auto;
+}
+
+/*ESTADO DE LAS SECCIONES (SPA)*/
+.view-section {
+    display: none;
+    /* Oculta las secciones inactivas por defecto */
+    width: 100%;
+    height: 100%;
+}
+
+.view-section.active {
+    display: flex;
+    /* Muestra solo la sección que tiene la clase .active */
+    flex-direction: column;
+    gap: 1.25rem;
+}
+
+/*ESTRUCTURA BASE DE LA GRILLA (Escritorio / PC)*/
+.metric-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1rem;
+    width: 100%;
+}
+
+.metric-card {
+    background-color: var(--bg-card);
+    border-radius: var(--radius-card);
+    padding: 1rem;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    align-items: center;
+}
+
+.metric-title {
+    font-family: var(--font-heading);
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+}
+
+.metric-value {
+    font-family: var(--font-heading);
+    font-size: 2rem;
+    color: var(--text-primary);
+    font-weight: 600;
+}
+
+.metric-change {
+    font-family: var(--font-heading);
+    font-size: 0.8rem;
+    font-weight: 500;
+}
+
+/*CLASES DE ESTADO SEGÚN EL INDICADOR*/
+.metric-change.status-success {
+    color: #10b981;
+    /* Verde: Meta superada o incremento positivo */
+}
+
+.metric-change.status-danger {
+    color: #ef4444;
+    /* Rojo: Por debajo de la meta o disminución */
+}
+
+.metric-change.status-neutral {
+    color: #3b82f6;
+    /* Azul: Informativo o estado igualado */
+}
+
+/*MEDIA QUERIES (RESPONSIVE)*/
+
+/*Pantallas medianas (Tablets: menor a 900px)*/
+@media (max-width: 900px) {
+    .metric-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+/*Pantallas pequeñas (Celulares: menor a 768px)*/
 @media (max-width: 768px) {
     header {
-        height: auto;               /* Permite que el header crezca verticalmente */
-        padding: 0.85rem 1rem;       /* Reducimos el padding lateral */
-        flex-direction: column;      /* Apilamos los bloques en columna */
+        height: auto;
+        /* Permite que el header crezca verticalmente */
+        padding: 0.85rem 1rem;
+        /* Reducimos el padding lateral */
+        flex-direction: column;
+        /* Apilamos los bloques en columna */
         gap: 0.75rem;
     }
 
@@ -245,33 +340,21 @@ header {
     }
 
     #nav a {
-        padding: 0.4rem 0.75rem;     /* Reducimos el relleno de las píldoras */
+        padding: 0.4rem 0.75rem;
+        /* Reducimos el relleno de las píldoras */
         font-size: 0.8rem;
     }
 
     #login {
         width: 100%;
-        justify-content: center;     /* Centramos la sección de usuario */
+        justify-content: center;
+        /* Centramos la sección de usuario */
     }
 }
-/*CONTENEDOR PRINCIPAL (<MAIN>)*/
-main {
-    flex: 1;
-    padding: 1.5rem 2rem;
-    max-width: 1300px;
-    width: 100%;
-    margin: 0 auto;
-}
 
-/*ESTADO DE LAS SECCIONES (SPA)*/
-.view-section {
-    display: none; /* Oculta las secciones inactivas por defecto */
-    width: 100%;
-    height: 100%;
-}
-
-.view-section.active {
-    display: flex; /* Muestra solo la sección que tiene la clase .active */
-    flex-direction: column;
-    gap: 1.25rem;
+/*Teléfonos pequeños (menor a 480px)*/
+@media (max-width: 480px) {
+    .metric-grid {
+        grid-template-columns: 1fr;
+    }
 }
