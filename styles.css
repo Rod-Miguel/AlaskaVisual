@@ -8,16 +8,19 @@
 
 /*VARIABLES GLOBALES (Design Tokens - Tu Paleta)*/
 :root {
-    --color-platinum: #ebebeb;
+    /* PALETA DE COLORES BASE */
+    --color-platinum: #f2f3f4;
     /* Blanco/Gris Platinado (Superficies/Fondos claros) */
-    --color-grey-olive: #8f8f8f;
+    --color-grey-olive: #848482;
     /* Gris Oliva (Bordes, textos secundarios, iconos) */
-    --color-onyx: #141414;
-    /* Ónix/Casi Negro (Textos contrastados, fondos oscuros) */
-    --color-royal-gold: #fcdc5f;
-    /* Dorado Real (Acento, métricas clave, destaques) */
-    --color-blue: #311fff;
-    /* Azul Eléctrico (Botones de acción, enlaces, hovers) */
+    --color-onyx: #111111;
+    /* Casi Negro/Ónix profundo (Fondos oscuros, contraste) */
+    --color-dark-slate: #111827;
+    /* Azul Oscuro Slate / Casi Negro (Botones principales, superficies elegidas) */
+    --color-electric-indigo: #4433ff;
+    /* Azul Eléctrico vibrante */
+    --color-royal-gold: #fadd6d;
+    /* Dorado Real / Amarillo Acento */
 
     /* ASIGNACIÓN DE ROLES (Modo Claro por Defecto) */
     --bg-main: var(--color-grey-olive);
@@ -26,13 +29,13 @@
 
     --text-primary: var(--color-onyx);
     --text-secondary: var(--color-grey-olive);
-    --border-color: rgba(143, 143, 143, 0.25);
+    --border-color: rgba(132, 132, 130, 0.25);
     /* Grey-olive con transparencia */
 
-    /* Botones y Acentos */
-    --accent-primary: var(--color-blue);
+    /* Botones y Acentos (Configurado con #111827 como color de acción) */
+    --accent-primary: var(--color-dark-slate);
     --accent-text: #ffffff;
-    --accent-hover: #2616d4;
+    --accent-hover: #1f2937;
     --accent-highlight: var(--color-royal-gold);
     /* Para destacar el total ganado o promedios */
 
@@ -228,6 +231,10 @@ header {
     color: var(--color-platinum);
 }
 
+#logout-button:active {
+    transform: scale(0.98);
+}
+
 /*CONTENEDOR PRINCIPAL (<MAIN>)*/
 main {
     flex: 1;
@@ -306,6 +313,151 @@ main {
     color: #3b82f6;
     /* Azul: Informativo o estado igualado */
 }
+.card{
+    
+    background-color: var(--bg-card);
+    border-radius: var(--radius-card);
+    padding: 1rem;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.card-content-box {
+    background-color: var(--color-platinum);
+    border-radius: var(--radius-card);
+    padding: 1rem;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    align-items: center;
+}
+
+.day-body {
+    display: flex;
+    flex-direction: row;
+    gap: 1rem;
+}
+
+#day-table-card {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+#deliveries-day-table {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+}
+
+/*ESTILOS LIMPIOS Y CENTRADOS PARA LA TABLA DE CARRERAS*/
+.table-container {
+    overflow-x: auto;
+    width: 100%;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    font-family: var(--font-heading);
+    font-size: 0.875rem;
+    text-align: center; /* Centra el texto de toda la tabla */
+}
+
+thead {
+    background-color: #f8f9fa;
+}
+
+th {
+    padding: 0.75rem 1rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: #6b7280;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    border-bottom: 1px solid var(--border-color);
+    text-align: center; /* Garantiza que los encabezados estén centrados derechitos */
+}
+
+td {
+    padding: 0.9rem 1rem;
+    color: var(--text-primary);
+    border-bottom: 1px solid rgba(143, 143, 143, 0.15);
+    vertical-align: middle;
+    text-align: center; /* Alinea cada dato en el centro exacto de su columna */
+}
+
+tbody tr:hover {
+    background-color: #f1f5f9;
+}
+
+/*COLUMNAS ESPECÍFICAS DE LA TABLA*/
+td:nth-child(5) {
+    font-weight: 700;
+    color: var(--text-primary);
+}
+
+/*TAGS/INSIGNIAS PARA REPARTIDORES EN LA TABLA*/
+.tag {
+    display: inline-block;
+    padding: 0.25rem 0.65rem;
+    border-radius: var(--radius-pill);
+    font-size: 0.72rem;
+    font-weight: 600;
+    line-height: 1;
+}
+
+.tag-yo {
+    background-color: #d1fae5;
+    color: #065f46;
+}
+
+.tag-companero {
+    background-color: #dbeafe;
+    color: #1e40af;
+}
+
+.basic-button {
+    background-color: var(--accent-primary);
+    color: var(--accent-text);
+    border: none;
+    border-radius: var(--radius-pill);
+    padding: 0.5rem 1.2rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    font-family: var(--font-heading);
+    font-size: 0.85rem;
+    font-weight: 600;
+}
+
+.basic-button:hover {
+    background-color: var(--accent-hover);
+    color: var(--accent-text);
+}
+.basic-button:active {
+    transform: scale(0.98);
+}
+
+
+
+
+
+
+
+
+
 
 /*MEDIA QUERIES (RESPONSIVE)*/
 

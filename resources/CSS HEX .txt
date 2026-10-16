@@ -1,0 +1,52 @@
+/* CSS HEX */
+--platinum: #f2f3f4ff;
+--grey-olive: #848482ff;
+--ink-black: #111827ff;
+--onyx: #111111ff;
+--bright-indigo: #4433ffff;
+--royal-gold: #fadd6dff;
+
+/* CSS HSL */
+--platinum: hsla(210, 8%, 95%, 1);
+--grey-olive: hsla(60, 1%, 51%, 1);
+--ink-black: hsla(221, 39%, 11%, 1);
+--onyx: hsla(0, 0%, 7%, 1);
+--bright-indigo: hsla(245, 100%, 60%, 1);
+--royal-gold: hsla(48, 93%, 70%, 1);
+
+/* SCSS HEX */
+$platinum: #f2f3f4ff;
+$grey-olive: #848482ff;
+$ink-black: #111827ff;
+$onyx: #111111ff;
+$bright-indigo: #4433ffff;
+$royal-gold: #fadd6dff;
+
+/* SCSS HSL */
+$platinum: hsla(210, 8%, 95%, 1);
+$grey-olive: hsla(60, 1%, 51%, 1);
+$ink-black: hsla(221, 39%, 11%, 1);
+$onyx: hsla(0, 0%, 7%, 1);
+$bright-indigo: hsla(245, 100%, 60%, 1);
+$royal-gold: hsla(48, 93%, 70%, 1);
+
+/* SCSS RGB */
+$platinum: rgba(242, 243, 244, 1);
+$grey-olive: rgba(132, 132, 130, 1);
+$ink-black: rgba(17, 24, 39, 1);
+$onyx: rgba(17, 17, 17, 1);
+$bright-indigo: rgba(68, 51, 255, 1);
+$royal-gold: rgba(250, 221, 109, 1);
+
+/* SCSS Gradient */
+$gradient-top: linear-gradient(0deg, #f2f3f4ff, #848482ff, #111827ff, #111111ff, #4433ffff, #fadd6dff);
+$gradient-right: linear-gradient(90deg, #f2f3f4ff, #848482ff, #111827ff, #111111ff, #4433ffff, #fadd6dff);
+$gradient-bottom: linear-gradient(180deg, #f2f3f4ff, #848482ff, #111827ff, #111111ff, #4433ffff, #fadd6dff);
+$gradient-left: linear-gradient(270deg, #f2f3f4ff, #848482ff, #111827ff, #111111ff, #4433ffff, #fadd6dff);
+$gradient-top-right: linear-gradient(45deg, #f2f3f4ff, #848482ff, #111827ff, #111111ff, #4433ffff, #fadd6dff);
+$gradient-bottom-right: linear-gradient(135deg, #f2f3f4ff, #848482ff, #111827ff, #111111ff, #4433ffff, #fadd6dff);
+$gradient-top-left: linear-gradient(225deg, #f2f3f4ff, #848482ff, #111827ff, #111111ff, #4433ffff, #fadd6dff);
+$gradient-bottom-left: linear-gradient(315deg, #f2f3f4ff, #848482ff, #111827ff, #111111ff, #4433ffff, #fadd6dff);
+$gradient-radial: radial-gradient(#f2f3f4ff, #848482ff, #111827ff, #111111ff, #4433ffff, #fadd6dff);
+
+

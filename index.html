@@ -74,7 +74,84 @@
                     <p class="metric-value">5.13$</p>
                     <span class="metric-change status-neutral">Acumulado(2dias)</span>
                 </div>
+            </div>
 
+            <!-- CUERPO DE DÍA CON LISTA DE PEDIDOS -->
+            <div class="day-body">
+
+                <!-- TARJETA PEDIDOS DETALLADOS -->
+                <div id="day-table-card" class="card">
+                    <div id="deliveries-day-table">
+                        <h3>Detalle de Carreras de Hoy</h3>
+                        <span>Fecha: <strong id="current-date">15 Oct 2026</strong></span>
+                    </div>
+
+                    <!-- TABLA PEDIDOS -->
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>Hora</th>
+                                    <th>Aporte Cliente</th>
+                                    <th>Aporte Restaurante</th>
+                                    <th>Total Carrera</th>
+                                    <th>Repartidor</th>
+                                </tr>
+                            </thead>
+                            <tbody id="deliveries-table-body">
+
+                                <!-- Filas de prueba estáticas para validar los estilos CSS -->
+                                <tr>
+                                    <td>1</td>
+                                    <td>12:30 PM</td>
+                                    <td>$2.50</td>
+                                    <td>$1.50</td>
+                                    <td>$4.00</td>
+                                    <td><span class="tag tag-yo">Yo</span></td>
+                                </tr>
+                                <tr>
+                                    <td>2</td>
+                                    <td>01:15 PM</td>
+                                    <td>$3.00</td>
+                                    <td>$1.50</td>
+                                    <td>$4.50</td>
+                                    <td><span class="tag tag-yo">Yo</span></td>
+                                </tr>
+                                <tr>
+                                    <td>3</td>
+                                    <td>02:00 PM</td>
+                                    <td>$2.00</td>
+                                    <td>$1.50</td>
+                                    <td>$3.50</td>
+                                    <td><span class="tag tag-companero">Compañero</span></td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                    </div>
+
+                </div>
+
+                <!-- TARJETA DESEMPEÑO DEL TURNO -->
+                <div class="card">
+                    <h3>Desempeño del turno</h3>
+                    <!-- CAJITA DESEMPEÑO PROPIO -->
+                    <div class="card-content-box">
+                        <h3 class="metric-title">Mis pedidos</h3>
+                        <p class="metric-value">6</p>
+                        <span class="metric-change status-success">25$ acumulados</span>
+                    </div>
+
+                    <div class="card-content-box">
+                        <h3 class="metric-title">Compañeros</h3>
+                        <p class="metric-value">6</p>
+                        <span class="metric-change status-success">30$ acumulados</span>
+                    </div>
+                    <!-- BOTON AGGREGAR PEDIDO -->
+                    <button class="basic-button" id="add-delivery-button">Agregar Pedido</button>
+                </div>
+            </div>
         </section>
 
         <!-- SECCION SEMANA -->
