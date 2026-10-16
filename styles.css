@@ -6,6 +6,7 @@
 }
 
 /*VARIABLES GLOBALES (Design Tokens - Tu Paleta Personalizada)*/
+
 :root {
     /* PALETA DE COLORES BASE */
     --color-platinum: #f2f3f4;
@@ -280,6 +281,7 @@ main {
 }
 
 /*CLASES DE ESTADO SEGÚN EL INDICADOR*/
+
 .metric-change.status-success {
     color: #10b981;
 }
@@ -287,6 +289,7 @@ main {
 .metric-change.status-danger {
     color: #ef4444;
 }
+
 
 .metric-change.status-neutral {
     color: #3b82f6;
@@ -374,6 +377,7 @@ main {
 }
 
 /*ESTILOS LIMPIOS Y CENTRADOS PARA LA TABLA DE CARRERAS*/
+
 .table-container {
     overflow-x: auto;
     width: 100%;
@@ -430,18 +434,254 @@ td:nth-child(5) {
     line-height: 1;
 }
 
-.tag-yo {
+.tag-green {
     background-color: #d1fae5;
     color: #065f46;
 }
 
-.tag-companero {
+.tag-blue {
     background-color: #dbeafe;
     color: #1e40af;
 }
 
+.tag-red {
+    background-color: #fee2e2;
+    color: #991b1b;
+}
 
 
+.week-header-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    gap: 1.25rem;
+    padding: 1.5rem 2rem;
+}
+
+.week-card-title h3 {
+    font-family: var(--font-heading);
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: 0.25rem;
+}
+
+.week-subtitle {
+    font-family: var(--font-heading);
+    font-size: 0.825rem;
+    color: var(--text-secondary);
+}
+
+/* BARRA DE CONTROL INTEGRADA (Capsule Control Bar) */
+.week-control-bar {
+    background-color: var(--color-platinum);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-pill);
+    padding: 0.35rem 0.5rem;
+    display: inline-flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 0.5rem;
+    box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.03);
+}
+
+[data-theme="dark"] .week-control-bar {
+    background-color: #2a2a2a;
+}
+
+/* Grupo interno de botones de navegación */
+.week-nav-group {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 0.25rem;
+}
+
+/* Divisor sutil vertical */
+.week-divider {
+    width: 1px;
+    height: 24px;
+    background-color: var(--border-color);
+}
+
+/* BOTONES DE CONTROL GENERALES */
+.w-control-btn {
+    background-color: transparent;
+    color: var(--text-primary);
+    border: none;
+    border-radius: var(--radius-pill);
+    padding: 0.5rem 0.85rem;
+    font-family: var(--font-heading);
+    font-size: 0.825rem;
+    font-weight: 600;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.4rem;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.w-control-btn i {
+    font-size: 0.85rem;
+}
+
+.w-control-btn:hover {
+    background-color: var(--bg-card);
+    color: var(--text-primary);
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+}
+
+/* Botón destacado 'Esta Semana' */
+.btn-current-week {
+    background-color: var(--accent-primary);
+    color: var(--accent-text);
+    padding: 0.5rem 1rem;
+}
+
+.btn-current-week:hover {
+    background-color: var(--accent-hover);
+    color: var(--accent-text);
+}
+
+/* Botón de búsqueda de semana */
+.btn-search-week {
+    color: var(--text-secondary);
+}
+
+.btn-search-week:hover {
+    color: var(--text-primary);
+}
+
+/* TARJETA SELECCIÓN DE MES */
+#month-selection-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    gap: 1.25rem;
+    padding: 1.5rem 2rem;
+}
+
+.month-card-title h3 {
+    font-family: var(--font-heading);
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: 0.25rem;
+}
+
+.month-subtitle {
+    font-family: var(--font-heading);
+    font-size: 0.825rem;
+    color: var(--text-secondary);
+}
+
+/* BARRA DE CONTROL INTEGRADA DEL MES (Capsule Control Bar) */
+.month-control-bar {
+    background-color: var(--color-platinum);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-pill);
+    padding: 0.35rem 0.5rem;
+    display: inline-flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 0.5rem;
+    box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.03);
+}
+
+[data-theme="dark"] .month-control-bar {
+    background-color: #2a2a2a;
+}
+
+/* Grupo interno de navegación por meses */
+.month-nav-group {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 0.25rem;
+}
+
+/* Divisor sutil vertical */
+.month-divider {
+    width: 1px;
+    height: 24px;
+    background-color: var(--border-color);
+}
+
+/* BOTONES DE CONTROL DE MESES */
+.month-control-btn {
+    background-color: transparent;
+    color: var(--text-primary);
+    border: none;
+    border-radius: var(--radius-pill);
+    padding: 0.5rem 0.85rem;
+    font-family: var(--font-heading);
+    font-size: 0.825rem;
+    font-weight: 600;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.4rem;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.month-control-btn i {
+    font-size: 0.85rem;
+}
+
+.month-control-btn:hover {
+    background-color: var(--bg-card);
+    color: var(--text-primary);
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+}
+
+/* Botón destacado 'Este Mes' */
+.btn-current-month {
+    background-color: var(--accent-primary);
+    color: var(--accent-text);
+    padding: 0.5rem 1rem;
+}
+
+.btn-current-month:hover {
+    background-color: var(--accent-hover);
+    color: var(--accent-text);
+}
+
+/* Botón de búsqueda de mes */
+.btn-search-month {
+    color: var(--text-secondary);
+}
+
+.btn-search-month:hover {
+    color: var(--text-primary);
+}
+
+/* TABLA DE MESES (HEADER INTERNO) */
+#deliveries-month-table {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+}
+
+#deliveries-month-table h3 {
+    font-family: var(--font-heading);
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+#deliveries-month-table strong {
+    font-family: var(--font-heading);
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--text-secondary);
+}
 
 
 
@@ -513,6 +753,50 @@ td:nth-child(5) {
     td {
         padding: 0.5rem 0.4rem;
         font-size: 0.75rem;
+    }
+
+    .week-control-bar {
+        flex-direction: column;
+        width: 100%;
+        border-radius: var(--radius-card);
+        padding: 0.6rem;
+    }
+
+    .week-nav-group {
+        width: 100%;
+        justify-content: space-between;
+    }
+
+    .week-divider {
+        width: 100%;
+        height: 1px;
+    }
+
+    .btn-search-week {
+        width: 100%;
+        justify-content: center;
+    }
+
+    .month-control-bar {
+        flex-direction: column;
+        width: 100%;
+        border-radius: var(--radius-card);
+        padding: 0.6rem;
+    }
+
+    .month-nav-group {
+        width: 100%;
+        justify-content: space-between;
+    }
+
+    .month-divider {
+        width: 100%;
+        height: 1px;
+    }
+
+    .btn-search-month {
+        width: 100%;
+        justify-content: center;
     }
 
 }

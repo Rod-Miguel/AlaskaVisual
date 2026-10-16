@@ -16,6 +16,8 @@
         rel="stylesheet">
 
     <link rel="stylesheet" href="styles.css">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 
 <body>
@@ -29,8 +31,8 @@
 
         <!-- 2. Navegación Principal (Filtros de Vista / Píldora) -->
         <nav id="nav">
-            <a href="#dia" class="active">Día</a>
-            <a href="#semana">Semana</a>
+            <a href="#dia">Día</a>
+            <a href="#semana" class="active">Semana</a>
             <a href="#mes">Mes</a>
         </nav>
 
@@ -44,7 +46,7 @@
         <!-- SECCIONES DE VISTA DE DÍA, SEMANA Y MES CON MÉTRICAS Y ESTILOS DE TARJETA -->
 
         <!-- SECCION DIA  -->
-        <section id="view-day" class="view-section active">
+        <section id="view-day" class="view-section">
 
             <!-- GRID DE MÉTRICAS -->
             <div class="metric-grid">
@@ -108,7 +110,7 @@
                                     <td>$2.50</td>
                                     <td>$1.50</td>
                                     <td>$4.00</td>
-                                    <td><span class="tag tag-yo">Yo</span></td>
+                                    <td><span class="tag-green">Yo</span></td>
                                 </tr>
                                 <tr>
                                     <td>2</td>
@@ -116,7 +118,7 @@
                                     <td>$3.00</td>
                                     <td>$1.50</td>
                                     <td>$4.50</td>
-                                    <td><span class="tag tag-yo">Yo</span></td>
+                                    <td><span class="tag-green">Yo</span></td>
                                 </tr>
                                 <tr>
                                     <td>3</td>
@@ -124,7 +126,7 @@
                                     <td>$2.00</td>
                                     <td>$1.50</td>
                                     <td>$3.50</td>
-                                    <td><span class="tag tag-companero">Compañero</span></td>
+                                    <td><span class="tag-blue">Compañero</span></td>
                                 </tr>
                             </tbody>
                         </table>
@@ -156,10 +158,191 @@
 
         <!-- SECCION SEMANA -->
         <section id="view-week" class="view-section">
+
+            <!-- TARJETA SELECCION DE SEMANA REDISEÑADA Y MODERNA -->
+            <div id="week-selection-card" class="card week-header-card">
+
+                <!-- ENCABEZADO Y TÍTULO -->
+                <div class="week-card-title">
+                    <h3>Detalle de Carreras de la Semana</h3>
+                    <span class="week-subtitle">Navega o busca el historial semanal</span>
+                </div>
+
+                <!-- BARRA INTEGRADA DE CONTROLES (Segmented Control) -->
+                <div class="week-control-bar">
+                    <!-- Grupo de Navegación por Semanas -->
+                    <div class="week-nav-group">
+                        <button class="w-control-btn" id="prev-week-button" title="Semana anterior">
+                            <i class="fa-solid fa-chevron-left"></i>
+                        </button>
+
+                        <button class="w-control-btn btn-current-week" id="current-week-button"
+                            title="Ir a semana actual">
+                            <i class="fa-solid fa-rotate-left"></i>
+                            <span>Esta Semana</span>
+                        </button>
+
+                        <button class="w-control-btn" id="next-week-button" title="Semana siguiente">
+                            <i class="fa-solid fa-chevron-right"></i>
+                        </button>
+                    </div>
+
+                    <div class="week-divider"></div>
+
+                    <!-- Botón de Búsqueda / Selección manual -->
+                    <button class="w-control-btn btn-search-week" id="select-week-button"
+                        title="Buscar por fecha especifica">
+                        <i class="fa-solid fa-magnifying-glass"></i>
+                        <span>Buscar Semana</span>
+                    </button>
+                </div>
+
+            </div>
+
+            <!-- TARJETA DE TABLA DE SEMANA -->
+            <div id="week-table-card" class="card">
+                <div id="deliveries-week-table">
+                    <h3>Resumen Histórico por Semanas</h3>
+                    <strong id="current-week">Semana 42</strong>
+                </div>
+
+                <!-- TABLA PEDIDOS -->
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Días</th>
+                                <th>Total Deliveries</th>
+                                <th>Ganancia Bruta</th>
+                                <th>Promedio Semana</th>
+                                <th>Estado</th>
+                            </tr>
+                        </thead>
+                        <tbody id="deliveries-table-body-week">
+                            <tr>
+                                <td>42</td>
+                                <td>09/oct - 15/oct</td>
+                                <td>18</td>
+                                <td>$60</td>
+                                <td>$3.33</td>
+                                <td><span class="tag tag-green">Completado</span></td>
+                            </tr>
+                            <tr>
+                                <td>43</td>
+                                <td>16/oct - 22/oct</td>
+                                <td>12</td>
+                                <td>$36</td>
+                                <td>$3.00</td>
+                                <td><span class="tag tag-blue">En progreso</span></td>
+                            </tr>
+                            <tr>
+                                <td>44</td>
+                                <td>23/oct - 30/oct</td>
+                                <td>20</td>
+                                <td>$70</td>
+                                <td>$3.50</td>
+                                <td><span class="tag tag-red">Pendiente</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
         </section>
 
         <!-- SECCION MES -->
-        <section id="view-month" class="view-section">
+        <section id="view-month" class="view-section active">
+
+            <!-- TARJETA SELECCION DE MES -->
+            <div id="month-selection-card" class="card week-header-card">
+
+                <!-- ENCABEZADO Y TÍTULO -->
+                <div class="month-card-title">
+                    <h3>Detalle de Carreras del Mes</h3>
+                    <span class="month-subtitle">Navega o busca el historial mensual</span>
+                </div>
+
+                <!-- BARRA INTEGRADA DE CONTROLES (Segmented Control) -->
+                <div class="month-control-bar">
+                    <!-- Grupo de Navegación por Meses -->
+                    <div class="month-nav-group">
+                        <button class="month-control-btn" id="prev-month-button" title="Mes anterior">
+                            <i class="fa-solid fa-chevron-left"></i>
+                        </button>
+
+                        <button class="month-control-btn btn-current-month" id="current-month-button"
+                            title="Ir a mes actual">
+                            <i class="fa-solid fa-rotate-left"></i>
+                            <span>Este Mes</span>
+                        </button>
+
+                        <button class="month-control-btn" id="next-month-button" title="Mes siguiente">
+                            <i class="fa-solid fa-chevron-right"></i>
+                        </button>
+                    </div>
+
+                    <div class="month-divider"></div>
+
+                    <!-- Botón de Búsqueda / Selección manual -->
+                    <button class="month-control-btn btn-search-month" id="select-month-button"
+                        title="Buscar por fecha especifica">
+                        <i class="fa-solid fa-magnifying-glass"></i>
+                        <span>Buscar Mes</span>
+                    </button>
+                </div>
+
+            </div>
+
+            <!-- TARJETA DE TABLA DE MES -->
+            <div id="month-table-card" class="card">
+                <div id="deliveries-month-table">
+                    <h3>Resumen Histórico por Meses</h3>
+                    <strong id="current-month">2026</strong>
+                </div>
+
+                <!-- TABLA PEDIDOS -->
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Mes</th>
+                                <th>Semanas</th>
+                                <th>Total Deliveries</th>
+                                <th>Ganancia Bruta</th>
+                                <th>Promedio Mes</th>
+                                <th>Estado</th>
+                            </tr>
+                        </thead>
+                        <tbody id="deliveries-table-body-month">
+                            <tr>
+                                <td>Ene</td>
+                                <td>4 semanas</td>
+                                <td>80</td>
+                                <td>$240</td>
+                                <td>3</td>
+                                <td><span class="tag tag-green">Completado</span></td>
+                            </tr>
+                            <tr>
+                                <td>Feb</td>
+                                <td>4 semanas</td>
+                                <td>12</td>
+                                <td>$36</td>
+                                <td>$3.00</td>
+                                <td><span class="tag tag-blue">En progreso</span></td>
+                            </tr>
+                            <tr>
+                                <td>Mar</td>
+                                <td>4 semanas</td>
+                                <td>20</td>
+                                <td>$70</td>
+                                <td>$3.50</td>
+                                <td><span class="tag tag-red">Pendiente</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
         </section>
     </main>
 </body>
