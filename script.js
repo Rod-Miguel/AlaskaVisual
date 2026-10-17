@@ -5,6 +5,8 @@ const vistas = {
     dia: "view-day", semana: "view-week", mes: "view-month"
 };
 
+// FUNCION PARA NAVEGACION EN EL #NAV
+
 links.forEach(function (link) {
     link.addEventListener("click", function (event) {
         event.preventDefault();
@@ -29,6 +31,8 @@ links.forEach(function (link) {
     });
 });
 
+// FUNCION PARA ACTIVAR DESACTIVA MODO OSCURO
+
 const avatarButton = document.querySelector("#avatar-display");
 
 avatarButton.addEventListener("click", function () {
@@ -43,3 +47,43 @@ avatarButton.addEventListener("click", function () {
         html.setAttribute("data-theme", "light");
     }
 });
+
+
+const PAGO_RESTAURANTE = 1;
+
+const pedidos = [
+    { hora: "14:40", aporteCliente: 2.75, repartidor: "Carlos" },
+    { hora: "12:15", aporteCliente: 3.50, repartidor: "Miguel" },
+    { hora: "19:05", aporteCliente: 4.00, repartidor: "Miguel" },
+];
+
+const tbodyDia = document.getElementById("deliveries-table-body");
+
+pedidos.forEach(function (pedido, posicion) {
+    const total = pedido.aporteCliente + PAGO_RESTAURANTE;
+
+    let quienEs = pedido.repartidor
+    let quienEscolor = "green"
+
+    if (quienEs === "Miguel") {
+        quienEs = "Yo";
+        quienEscolor = "green";
+    } else {
+        quienEs = "Compañero";
+        quienEscolor = "blue";
+    }
+
+    const fila = document.createElement("tr");
+    fila.innerHTML = `
+    <td>${posicion + 1}</td>
+    <td>${pedido.hora}</td>
+    <td>${pedido.aporteCliente.toFixed(2) + "$"}</td>
+    <td>${PAGO_RESTAURANTE.toFixed(2) + "$"}</td>
+    <td>${total.toFixed(2) + "$"}</td>
+    <td><span class="tag tag-${quienEscolor}">${quienEs}</span></td>
+    `;
+    tbodyDia.appendChild(fila);
+
+
+});
+
