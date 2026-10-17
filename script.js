@@ -14,6 +14,7 @@ links.forEach(function (link) {
         links.forEach(function (item) {
             item.classList.remove("active");
         });
+        
         // 2. Encender la píldora que pulsé
         link.classList.add("active");
 
@@ -21,6 +22,7 @@ links.forEach(function (link) {
         sections.forEach(function (section) {
             section.classList.remove("active");
         });
+
         // 4. Encender la sección que corresponde
         const sectionToShow = document.getElementById(vistas[target]);
         sectionToShow.classList.add("active");
