@@ -14,7 +14,7 @@ links.forEach(function (link) {
         links.forEach(function (item) {
             item.classList.remove("active");
         });
-        
+
         // 2. Encender la píldora que pulsé
         link.classList.add("active");
 
@@ -27,4 +27,19 @@ links.forEach(function (link) {
         const sectionToShow = document.getElementById(vistas[target]);
         sectionToShow.classList.add("active");
     });
+});
+
+const avatarButton = document.querySelector("#avatar-display");
+
+avatarButton.addEventListener("click", function () {
+    console.log("Click en avatar");
+
+    const html = document.documentElement;
+    const currentTheme = html.getAttribute("data-theme");
+
+    if (currentTheme === "light") {
+        html.setAttribute("data-theme", "dark");
+    } else {
+        html.setAttribute("data-theme", "light");
+    }
 });
