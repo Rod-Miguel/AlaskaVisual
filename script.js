@@ -59,14 +59,21 @@ avatarButton.addEventListener("click", function () {
 // DATOS DEL DIA
 // APORTE FIJO DEL RESTAURANTE POR PEDIDO (EN MAYUSCULAS: CONSTANTE QUE NO CAMBIA)
 const PAGO_RESTAURANTE = 1;
+const USUARIO_ACTUAL = "Miguel";
 
 // ARREGLO DE OBJETOS: CADA OBJETO ES UN PEDIDO
 // SOLO SE GUARDA LO QUE NO SE PUEDE CALCULAR: EL TOTAL SE CALCULA CUANDO SE NECESITA
 const pedidos = [
-    { hora: "14:40", aporteCliente: 2.75, repartidor: "Carlos" },
-    { hora: "12:15", aporteCliente: 3.50, repartidor: "Miguel" },
-    { hora: "19:05", aporteCliente: 4.00, repartidor: "Miguel" },
-];
+    { hora: "11:30", aporteCliente: 3, repartidor: "Miguel" },
+    { hora: "12:45", aporteCliente: 5, repartidor: "Oliver" },
+    { hora: "14:10", aporteCliente: 2, repartidor: "Miguel" },
+    { hora: "15:25", aporteCliente: 4, repartidor: "Oliver" },
+    { hora: "18:00", aporteCliente: 6, repartidor: "Miguel" },
+    { hora: "19:50", aporteCliente: 3, repartidor: "Oliver" },
+    { hora: "21:15", aporteCliente: 4, repartidor: "Miguel" },
+    { hora: "14:40", aporteCliente: 2, repartidor: "Oliver" },
+    { hora: "19:05", aporteCliente: 4, repartidor: "Miguel" },
+]
 
 // TABLA DEL DIA: DIBUJA UNA FILA POR CADA PEDIDO DEL ARREGLO
 // <tbody> DONDE SE AGREGAN LAS FILAS (EN EL HTML EXISTE VACIO)
@@ -81,7 +88,7 @@ pedidos.forEach(function (pedido, posicion) {
     let quienEsColor = "green"
     // SI EL REPARTIDOR ES "Miguel" SE MUESTRA COMO "Yo" EN VERDE
     // SI ES CUALQUIER OTRO SE MUESTRA COMO COMPANERO EN AZUL
-    if (quienEs === "Miguel") {
+    if (quienEs === USUARIO_ACTUAL) {
         quienEs = "Yo";
         quienEsColor = "green";
     } else {
@@ -138,3 +145,46 @@ deliveriesAverage.textContent = theAverage.toFixed(2) + "$";
 
 // TODO: TARJETAS "MIS PEDIDOS" (mine-orders) Y "COMPANEROS" (them-orders) PENDIENTES
 // FALTA SEPARAR LOS PEDIDOS POR REPARTIDOR PARA PODER CALCULARLAS
+
+const currentUserCard = document.getElementById("mine-orders")
+console.log(currentUserCard.textContent)
+
+const otherUserCard = document.getElementById("them-orders")
+console.log(currentUserCard.textContent)
+
+
+let mineOrders = 0;
+let themOrders = 0;
+
+pedidos.forEach(function (pedido) {
+    if (pedido.repartidor === USUARIO_ACTUAL) {
+        mineOrders = mineOrders + 1;
+    }
+    else {
+        themOrders = themOrders + 1;
+    }
+});
+
+currentUserCard.textContent = mineOrders;
+otherUserCard.textContent = themOrders;
+
+const currentUserCardIncome = document.getElementById("mine-income");
+const otherUserCardIncome = document.getElementById("them-income");
+
+let mineIncome = 0;
+let otherIncome = 0;
+
+
+pedidos.forEach(function (pedido) {
+
+    const totalOrder = pedido.aporteCliente + PAGO_RESTAURANTE;
+
+    if (pedido.repartidor === USUARIO_ACTUAL) {
+        mineIncome = mineIncome + totalOrder
+    }else {
+        otherIncome = otherIncome + totalOrder
+    }
+});
+
+currentUserCardIncome.textContent = mineIncome.toFixed(2) + "$ acumulados"
+otherUserCardIncome.textContent = otherIncome.toFixed(2) + "$ acumulados"
