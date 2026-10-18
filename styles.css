@@ -194,9 +194,7 @@ header {
     font-size: 0.8rem;
     font-weight: 700;
     line-height: 1;
-    cursor: pointer;
-
-    transition: all 0.2s ease;
+    
 }
 
 #avatar-display:hover {

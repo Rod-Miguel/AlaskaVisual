@@ -35,7 +35,7 @@ Primero todo funciona en el navegador guardando en `localStorage`. Después se m
 
 - [X] 1. **Modo claro / oscuro:** botón en el header que alterna `data-theme="dark"`
 - [X] 2. **Los datos como datos:** un arreglo de objetos (un pedido = un objeto con hora, aporte cliente, aporte restaurante, repartidor) y JS que dibuja la tabla a partir de él
-- [ ] 3. **Calcular métricas:** totales y promedios del día salen de los datos, no de números fijos
+- [X] 3. **Calcular métricas:** totales y promedios del día salen de los datos, no de números fijos
 - [ ] 4. **Agregar pedido manual:** formulario en un modal; el pedido entra al arreglo y todo se recalcula
 - [ ] 5. **Editar y borrar:** botones por fila
 - [ ] 6. **Guardar en `localStorage`:** que al recargar no se pierda nada
