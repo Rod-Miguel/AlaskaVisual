@@ -59,6 +59,8 @@ avatarButton.addEventListener("click", function () {
 // DATOS DEL DIA
 // APORTE FIJO DEL RESTAURANTE POR PEDIDO (EN MAYUSCULAS: CONSTANTE QUE NO CAMBIA)
 const PAGO_RESTAURANTE = 1;
+// USUARIO QUE USA LA APP: SE COMPARA CON pedido.repartidor PARA SABER CUALES SON "MIS" PEDIDOS
+// CUANDO EXISTA EL LOGIN, SU VALOR VENDRA DE LA SESION DEL USUARIO (FASES 3 Y 4 DEL ROADMAP)
 const USUARIO_ACTUAL = "Miguel";
 
 // ARREGLO DE OBJETOS: CADA OBJETO ES UN PEDIDO
@@ -73,7 +75,7 @@ const pedidos = [
     { hora: "21:15", aporteCliente: 4, repartidor: "Miguel" },
     { hora: "14:40", aporteCliente: 2, repartidor: "Oliver" },
     { hora: "19:05", aporteCliente: 4, repartidor: "Miguel" },
-]
+];
 
 // TABLA DEL DIA: DIBUJA UNA FILA POR CADA PEDIDO DEL ARREGLO
 // <tbody> DONDE SE AGREGAN LAS FILAS (EN EL HTML EXISTE VACIO)
@@ -84,9 +86,9 @@ pedidos.forEach(function (pedido, posicion) {
     // TOTAL DE LA CARRERA = APORTE DEL CLIENTE + APORTE DEL RESTAURANTE
     const total = pedido.aporteCliente + PAGO_RESTAURANTE;
     // TEXTO Y COLOR DE LA ETIQUETA DEL REPARTIDOR (COLOR VERDE POR DEFECTO)
-    let quienEs = pedido.repartidor
-    let quienEsColor = "green"
-    // SI EL REPARTIDOR ES "Miguel" SE MUESTRA COMO "Yo" EN VERDE
+    let quienEs = pedido.repartidor;
+    let quienEsColor = "green";
+    // SI EL REPARTIDOR ES USUARIO_ACTUAL SE MUESTRA COMO "Yo" EN VERDE
     // SI ES CUALQUIER OTRO SE MUESTRA COMO COMPANERO EN AZUL
     if (quienEs === USUARIO_ACTUAL) {
         quienEs = "Yo";
@@ -106,7 +108,7 @@ pedidos.forEach(function (pedido, posicion) {
     <td>${pedido.hora}</td>
     <td>${pedido.aporteCliente.toFixed(2) + "$"}</td>
     <td>${PAGO_RESTAURANTE.toFixed(2) + "$"}</td>
-    <td>${total.toFixed(2) + "$"}</td>
+    <td class="cell-key-figure">${total.toFixed(2) + "$"}</td>
     <td><span class="tag tag-${quienEsColor}">${quienEs}</span></td>
     `;
     // ENGANCHA LA FILA COMO ULTIMO HIJO DEL <tbody>: ESTE PASO ES EL QUE LA HACE VISIBLE
@@ -120,71 +122,75 @@ const deliveriesAmount = document.getElementById("metric-orders");
 deliveriesAmount.textContent = pedidos.length;
 
 // TARJETA INGRESOS: SUMA EL TOTAL DE TODOS LOS PEDIDOS
-const totalIncome = document.getElementById("metric-income")
+const totalIncome = document.getElementById("metric-income");
 
 // ACUMULADOR: ARRANCA EN 0 FUERA DEL BUCLE PARA QUE NO SE REINICIE EN CADA VUELTA
 let finalIncome = 0;
 
 pedidos.forEach(function (pedido) {
     // SE RECALCULA EL TOTAL PORQUE EL total DE LA TABLA SOLO EXISTE DENTRO DE ESE BUCLE
-    const total = pedido.aporteCliente + PAGO_RESTAURANTE
+    const total = pedido.aporteCliente + PAGO_RESTAURANTE;
     // LA CAJA SE VALE A SI MISMA MAS EL TOTAL DE ESTE PEDIDO
     finalIncome = finalIncome + total;
-})
+});
 
 // EL FORMATO (2 DECIMALES Y $) SE APLICA UNA SOLA VEZ AL FINAL, CUANDO LA SUMA YA TERMINO
 totalIncome.textContent = finalIncome.toFixed(2) + "$";
 
 // TARJETA PROMEDIO DIA: PROMEDIO POR PEDIDO = INGRESO TOTAL / CANTIDAD DE PEDIDOS
-const deliveriesAverage = document.getElementById("metric-average")
+const deliveriesAverage = document.getElementById("metric-average");
 
 // TODO: SI NO HAY PEDIDOS (pedidos.length === 0) ESTA DIVISION DA NaN, FALTA PROTEGER ESE CASO
-const theAverage = finalIncome / pedidos.length
+const theAverage = finalIncome / pedidos.length;
 
 deliveriesAverage.textContent = theAverage.toFixed(2) + "$";
 
-// TODO: TARJETAS "MIS PEDIDOS" (mine-orders) Y "COMPANEROS" (them-orders) PENDIENTES
-// FALTA SEPARAR LOS PEDIDOS POR REPARTIDOR PARA PODER CALCULARLAS
+// TARJETA DESEMPENO DEL TURNO: CANTIDAD DE PEDIDOS Y DINERO ACUMULADO POR REPARTIDOR
+// "MIS PEDIDOS" = pedido.repartidor IGUAL A USUARIO_ACTUAL; "COMPANEROS" = TODOS LOS DEMAS
+// ELEMENTOS <p> DONDE SE ESCRIBE LA CANTIDAD DE PEDIDOS DE CADA GRUPO
+const currentUserCard = document.getElementById("mine-orders");
+// TODO: BORRAR LOS console.log DE PRUEBA (EL SEGUNDO IMPRIME currentUserCard EN VEZ DE otherUserCard)
+console.log(currentUserCard.textContent);
 
-const currentUserCard = document.getElementById("mine-orders")
-console.log(currentUserCard.textContent)
+const otherUserCard = document.getElementById("them-orders");
+console.log(currentUserCard.textContent);
 
-const otherUserCard = document.getElementById("them-orders")
-console.log(currentUserCard.textContent)
-
-
+// DOS CONTADORES, UNO POR GRUPO: ARRANCAN EN 0 FUERA DEL BUCLE
 let mineOrders = 0;
 let themOrders = 0;
 
+// CADA PEDIDO SUMA 1 AL CONTADOR DEL GRUPO AL QUE PERTENECE
 pedidos.forEach(function (pedido) {
     if (pedido.repartidor === USUARIO_ACTUAL) {
         mineOrders = mineOrders + 1;
-    }
-    else {
+    } else {
         themOrders = themOrders + 1;
     }
 });
 
+// ESCRIBE LOS CONTADORES EN SUS TARJETAS
 currentUserCard.textContent = mineOrders;
 otherUserCard.textContent = themOrders;
 
+// ELEMENTOS <span> DONDE SE ESCRIBE EL DINERO ACUMULADO DE CADA GRUPO
 const currentUserCardIncome = document.getElementById("mine-income");
 const otherUserCardIncome = document.getElementById("them-income");
 
+// DOS ACUMULADORES DE DINERO, UNO POR GRUPO
 let mineIncome = 0;
 let otherIncome = 0;
 
-
 pedidos.forEach(function (pedido) {
-
+    // TODO: ESTA FORMULA (aporteCliente + PAGO_RESTAURANTE) YA ESTA EN 3 SITIOS: CANDIDATA A UNA FUNCION
     const totalOrder = pedido.aporteCliente + PAGO_RESTAURANTE;
-
+    // EL TOTAL DE LA CARRERA SE SUMA AL ACUMULADOR DEL GRUPO DEL REPARTIDOR
     if (pedido.repartidor === USUARIO_ACTUAL) {
-        mineIncome = mineIncome + totalOrder
-    }else {
-        otherIncome = otherIncome + totalOrder
+        mineIncome = mineIncome + totalOrder;
+    } else {
+        otherIncome = otherIncome + totalOrder;
     }
 });
 
-currentUserCardIncome.textContent = mineIncome.toFixed(2) + "$ acumulados"
-otherUserCardIncome.textContent = otherIncome.toFixed(2) + "$ acumulados"
+// FORMATO FINAL: 2 DECIMALES Y TEXTO "acumulados"
+currentUserCardIncome.textContent = mineIncome.toFixed(2) + "$ acumulados";
+otherUserCardIncome.textContent = otherIncome.toFixed(2) + "$ acumulados";

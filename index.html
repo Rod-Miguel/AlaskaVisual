@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+<!-- DELIVERY ANALYTICS DASHBOARD: PAGINA UNICA (SPA) CON 3 VISTAS (DIA, SEMANA, MES). ESTILOS EN styles.css Y LOGICA EN script.js. EL ATRIBUTO data-theme DE <html> ES EL TEMA ACTIVO (light / dark) Y LO CAMBIA script.js -->
 <html lang="es" data-theme="light">
 
 <head>
@@ -15,8 +16,10 @@
         href="https://fonts.googleapis.com/css2?family=Cambay:wght@400;700&family=Inter:wght@400;500;600;700&display=swap"
         rel="stylesheet">
 
+    <!-- HOJA DE ESTILOS PROPIA: VARIABLES, COMPONENTES Y RESPONSIVE -->
     <link rel="stylesheet" href="styles.css">
 
+    <!-- ICONOS FONT AWESOME: SE USAN COMO <i class="fa-solid fa-..."> EN LOS BOTONES DE SEMANA Y MES -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 
@@ -31,6 +34,7 @@
 
         <!-- 2. Navegación Principal (Filtros de Vista / Píldora) -->
         <nav id="nav">
+            <!-- href SIN EL # ES LA CLAVE DEL DICCIONARIO vistas EN script.js. LA CLASE active MARCA LA PILDORA DE LA VISTA ACTUAL -->
             <a href="#dia" class="active">Día</a>
             <a href="#semana">Semana</a>
             <a href="#mes">Mes</a>
@@ -38,21 +42,26 @@
 
         <!-- 3. Área de Usuario / Login -->
         <div id="login">
+            <!-- AVATAR: BOTON QUE ALTERNA EL MODO CLARO / OSCURO (script.js) -->
             <button id="avatar-display" title="Cambiar tema">MR</button>
+            <!-- BOTON DE USUARIO: SIN FUNCION TODAVIA, RESERVADO PARA EL LOGIN / CERRAR SESION -->
             <button id="logout-button">Usuario</button>
         </div>
     </header>
+    <!-- CONTENIDO PRINCIPAL: LAS 3 VISTAS ESTAN EN EL HTML Y SOLO UNA TIENE LA CLASE active. script.js SE ENCARGA DE CAMBIARLA -->
     <main>
         <!-- SECCIONES DE VISTA DE DÍA, SEMANA Y MES CON MÉTRICAS Y ESTILOS DE TARJETA -->
 
-        <!-- SECCION DIA  -->
+        <!-- SECCION DIA -->
         <section id="view-day" class="view-section active">
 
             <!-- GRID DE MÉTRICAS -->
             <div class="metric-grid">
-                <div  class="metric-card">
+                <div class="metric-card">
                     <h3 class="metric-title">Pedidos</h3>
+                    <!-- LOS id metric-* LOS USA script.js. EL TEXTO DE ADENTRO ES UN VALOR DE RELLENO QUE JS REEMPLAZA AL CARGAR -->
                     <p id="metric-orders" class="metric-value">6</p>
+                    <!-- TEXTO FIJO: PENDIENTE DE CALCULAR CON LOS DATOS DE AYER (PASO 7) -->
                     <span class="metric-change status-success">+2 desde ayer</span>
                 </div>
 
@@ -73,8 +82,9 @@
                 <!-- CARD DE MÉTRICA DE PROMEDIO SEMANA -->
                 <div class="metric-card">
                     <h3 class="metric-title">Promedio Semana</h3>
-                    <p class="metric-value">P/D</p>
-                    <span id="metric-average-week" class="metric-change status-neutral">Acumulado(2dias)</span>
+                    <!-- P/D = PENDIENTE: PROMEDIO SEMANA NECESITA DATOS DE VARIOS DIAS (PASO 7). -->
+                    <p id="metric-average-week" class="metric-value">P/D</p>
+                    <span class="metric-change status-neutral">Acumulado(2dias)</span>
                 </div>
             </div>
 
@@ -83,8 +93,9 @@
 
                 <!-- TARJETA PEDIDOS DETALLADOS -->
                 <div id="day-table-card" class="card">
-                    <div id="deliveries-day-table">
+                    <div id="deliveries-day-table" class="table-card-header">
                         <h3>Detalle de Carreras de Hoy</h3>
+                        <!-- FECHA FIJA DE EJEMPLO: PENDIENTE DE GENERARLA CON JS -->
                         <strong id="current-date">15 Oct 2026</strong>
                     </div>
 
@@ -101,6 +112,7 @@
                                     <th>Repartidor</th>
                                 </tr>
                             </thead>
+                            <!-- VACIO A PROPOSITO: script.js DIBUJA UNA FILA <tr> POR CADA PEDIDO -->
                             <tbody id="deliveries-table-body">
                             </tbody>
                         </table>
@@ -114,17 +126,19 @@
                     <h3>Desempeño del turno</h3>
                     <!-- CAJITA DESEMPEÑO PROPIO -->
                     <div class="card-content-box">
+                        <!-- LOS id mine-* Y them-* LOS USA script.js: CANTIDAD Y DINERO ACUMULADO DE USUARIO_ACTUAL Y DE SUS COMPANEROS (EL TEXTO ES DE RELLENO) -->
                         <h3 class="metric-title">Mis pedidos</h3>
-                        <p id= "mine-orders" class="metric-value">6</p>
+                        <p id="mine-orders" class="metric-value">6</p>
                         <span id="mine-income" class="metric-change status-success">25$ acumulados</span>
                     </div>
 
                     <div class="card-content-box">
                         <h3 class="metric-title">Compañeros</h3>
-                        <p id= "them-orders" class="metric-value">8</p>
+                        <p id="them-orders" class="metric-value">8</p>
                         <span id="them-income" class="metric-change status-success">30$ acumulados</span>
                     </div>
-                    <!-- BOTON AGGREGAR PEDIDO -->
+                    <!-- BOTON AGREGAR PEDIDO -->
+                    <!-- RESERVADO: SIN CLIC TODAVIA, ABRIRA EL FORMULARIO DE NUEVO PEDIDO (PASO 4) -->
                     <button class="basic-button" id="add-delivery-button">Agregar Pedido</button>
                 </div>
             </div>
@@ -146,6 +160,7 @@
                 <div class="week-control-bar">
                     <!-- Grupo de Navegación por Semanas -->
                     <div class="week-nav-group">
+                        <!-- LOS BOTONES DE SEMANA Y SUS id ESTAN RESERVADOS: SE PROGRAMAN EN EL PASO 7 -->
                         <button class="w-control-btn" id="prev-week-button" title="Semana anterior">
                             <i class="fa-solid fa-chevron-left"></i>
                         </button>
@@ -175,7 +190,7 @@
 
             <!-- TARJETA DE TABLA DE SEMANA -->
             <div id="week-table-card" class="card">
-                <div id="deliveries-week-table">
+                <div id="deliveries-week-table" class="table-card-header">
                     <h3>Resumen Histórico por Semanas</h3>
                     <strong id="current-week">Semana 42</strong>
                 </div>
@@ -193,13 +208,14 @@
                                 <th>Estado</th>
                             </tr>
                         </thead>
+                        <!-- FILAS DE EJEMPLO ESTATICAS: SE REEMPLAZARAN POR DATOS REALES AGRUPADOS POR SEMANA (PASO 7) -->
                         <tbody id="deliveries-table-body-week">
                             <tr>
                                 <td>42</td>
                                 <td>09/oct - 15/oct</td>
                                 <td>18</td>
                                 <td>$60</td>
-                                <td>$3.33</td>
+                                <td class="cell-key-figure">$3.33</td>
                                 <td><span class="tag tag-green">Completado</span></td>
                             </tr>
                             <tr>
@@ -207,7 +223,7 @@
                                 <td>16/oct - 22/oct</td>
                                 <td>12</td>
                                 <td>$36</td>
-                                <td>$3.00</td>
+                                <td class="cell-key-figure">$3.00</td>
                                 <td><span class="tag tag-blue">En progreso</span></td>
                             </tr>
                             <tr>
@@ -215,7 +231,7 @@
                                 <td>23/oct - 30/oct</td>
                                 <td>20</td>
                                 <td>$70</td>
-                                <td>$3.50</td>
+                                <td class="cell-key-figure">$3.50</td>
                                 <td><span class="tag tag-red">Pendiente</span></td>
                             </tr>
                         </tbody>
@@ -240,6 +256,7 @@
                 <div class="month-control-bar">
                     <!-- Grupo de Navegación por Meses -->
                     <div class="month-nav-group">
+                        <!-- LOS BOTONES DE MES Y SUS id ESTAN RESERVADOS: SE PROGRAMAN EN EL PASO 7 -->
                         <button class="month-control-btn" id="prev-month-button" title="Mes anterior">
                             <i class="fa-solid fa-chevron-left"></i>
                         </button>
@@ -269,7 +286,7 @@
 
             <!-- TARJETA DE TABLA DE MES -->
             <div id="month-table-card" class="card">
-                <div id="deliveries-month-table">
+                <div id="deliveries-month-table" class="table-card-header">
                     <h3>Resumen Histórico por Meses</h3>
                     <strong id="current-month">2026</strong>
                 </div>
@@ -287,13 +304,14 @@
                                 <th>Estado</th>
                             </tr>
                         </thead>
+                        <!-- FILAS DE EJEMPLO ESTATICAS: SE REEMPLAZARAN POR DATOS REALES AGRUPADOS POR MES (PASO 7) -->
                         <tbody id="deliveries-table-body-month">
                             <tr>
                                 <td>Ene</td>
                                 <td>4 semanas</td>
                                 <td>80</td>
                                 <td>$240</td>
-                                <td>3</td>
+                                <td class="cell-key-figure">$3.50</td>
                                 <td><span class="tag tag-green">Completado</span></td>
                             </tr>
                             <tr>
@@ -301,7 +319,7 @@
                                 <td>4 semanas</td>
                                 <td>12</td>
                                 <td>$36</td>
-                                <td>$3.00</td>
+                                <td class="cell-key-figure">$3.00</td>
                                 <td><span class="tag tag-blue">En progreso</span></td>
                             </tr>
                             <tr>
@@ -309,7 +327,7 @@
                                 <td>4 semanas</td>
                                 <td>20</td>
                                 <td>$70</td>
-                                <td>$3.50</td>
+                                <td class="cell-key-figure">$3.33</td>
                                 <td><span class="tag tag-red">Pendiente</span></td>
                             </tr>
                         </tbody>
@@ -319,8 +337,8 @@
 
         </section>
     </main>
+    <!-- SCRIPT AL FINAL DEL body: ASI TODO EL HTML YA EXISTE CUANDO JS LO BUSCA CON getElementById / querySelector -->
     <script src="script.js"></script>
 </body>
-
 
 </html>
