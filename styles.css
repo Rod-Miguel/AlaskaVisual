@@ -1,27 +1,47 @@
-/*DELIVERY ANALYTICS DASHBOARD: HOJA DE ESTILOS
-ORDEN DEL ARCHIVO, DE LO GENERAL A LO ESPECIFICO: RESET > VARIABLES > BASE > HEADER > LAYOUT > COMPONENTES COMUNES > VISTA DIA > VISTA SEMANA > VISTA MES > RESPONSIVE
-COMO DECIDE EL NAVEGADOR CUANDO DOS REGLAS CHOCAN: PRIMERO GANA LA MAS ESPECIFICA (id > clase > etiqueta); SI EMPATAN, GANA LA QUE ESTA MAS ABAJO EN EL ARCHIVO
-POR ESO LAS VARIANTES (:hover, modo oscuro) VAN DESPUES DE SU BASE Y LOS MEDIA QUERIES AL FINAL
-LAS NOTAS REDUNDANTE, REUTILIZABLE, ORDEN CRITICO Y TODO SON AVISOS PARA MEJORAR EL ARCHIVO: NO CAMBIAN COMO SE VE LA PAGINA*/
+/*
+ * styles.css - Hoja de estilos del Delivery Analytics Dashboard
+ *
+ * Orden del archivo, de lo general a lo específico:
+ *   1. Reset  2. Variables y temas  3. Base  4. Header  5. Layout
+ *   6. Componentes comunes  7. Vista Día  8. Vista Semana  9. Vista Mes
+ *   10. Responsive (media queries)
+ *
+ * Cómo decide el navegador cuando dos reglas chocan (cascada):
+ *   - Gana la regla con selector más específico (id > clase > etiqueta).
+ *   - Si empatan en especificidad, gana la que está más abajo en el archivo.
+ * Por eso las variantes (:hover, modo oscuro) van después de su regla base
+ * y los media queries van al final.
+ *
+ * Temas: los colores se definen como variables CSS (--nombre) y las reglas
+ * los usan con var(--nombre). Cambiar de tema consiste en cambiar el valor de
+ * esas variables; no se reescriben las reglas de cada componente.
+ */
 
-/*SECCION 1: RESET*/
+/* ============================================================
+ * 1. RESET
+ * ============================================================ */
 
-/*CSS RESET (Elimina los márgenes del navegador)*/
-
+/* Selector universal: se aplica a todos los elementos.
+   - margin y padding en 0 eliminan los espacios por defecto del navegador.
+   - box-sizing: border-box hace que width y height incluyan padding y borde,
+     lo que facilita calcular tamaños. */
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
 }
 
-/*SECCION 2: VARIABLES (PALETA, ROLES Y TEMA OSCURO)*/
+/* ============================================================
+ * 2. VARIABLES (PALETA, ROLES Y TEMA OSCURO)
+ * ============================================================ */
 
-/*VARIABLES GLOBALES (Design Tokens - Tu Paleta Personalizada)*/
-
-/*ORDEN CRITICO: LA REGLA DEL TEMA OSCURO (SIGUIENTE) TIENE LA MISMA ESPECIFICIDAD QUE :root, POR ESO TIENE QUE ESTAR DESPUES: SI DOS REGLAS EMPATAN, GANA LA QUE ESTA MAS ABAJO*/
-
+/* :root equivale a la etiqueta <html>. Las variables declaradas aquí están
+   disponibles en todo el documento y representan el tema claro (el valor
+   por defecto, porque index.html empieza con data-theme="light").
+   El tema oscuro está más abajo y debe ir DESPUÉS de esta regla: ambos
+   selectores tienen la misma especificidad y, en un empate, gana el último. */
 :root {
-    /* PALETA DE COLORES BASE */
+    /* Paleta base: colores "crudos" con nombre, sin función asignada */
     --color-platinum: #f2f3f4;
     --color-grey-olive: #848482;
     --color-dark-slate: #111827;
@@ -29,7 +49,9 @@ LAS NOTAS REDUNDANTE, REUTILIZABLE, ORDEN CRITICO Y TODO SON AVISOS PARA MEJORAR
     --color-electric-indigo: #4433ff;
     --color-royal-gold: #fadd6d;
 
-    /* ASIGNACIÓN DE ROLES (Modo Claro por Defecto) */
+    /* Roles: dan un uso a cada color ("fondo principal", "texto", etc.).
+       Los componentes usan los roles, no la paleta, y así el tema puede
+       cambiar el color de un rol sin tocar los componentes */
     --bg-main: var(--color-grey-olive);
     --bg-card: #ffffff;
     --bg-header: #ffffff;
@@ -39,26 +61,25 @@ LAS NOTAS REDUNDANTE, REUTILIZABLE, ORDEN CRITICO Y TODO SON AVISOS PARA MEJORAR
     --text-secondary: var(--color-grey-olive);
     --border-color: rgba(132, 132, 130, 0.25);
 
-    /* Botones y Acentos (#111827 como acción predeterminada) */
+    /* Botones y acentos */
     --accent-primary: var(--color-dark-slate);
     --accent-text: #ffffff;
     --accent-hover: #1f2937;
     --accent-highlight: var(--color-royal-gold);
 
-    /* Bordes Redondeados */
+    /* Radios de borde: tarjetas y formas de píldora (valor muy alto = extremos totalmente redondeados) */
     --radius-card: 12px;
     --radius-pill: 9999px;
 
-    /* FAMILIAS TIPOGRÁFICAS */
+    /* Familias tipográficas. --font-primary se usa solo en body; la mayoría de los componentes definen su propia fuente con --font-heading */
     --font-primary: 'Cambay', sans-serif;
     --font-heading: 'Inter', sans-serif;
 }
 
-/*ASIGNACIÓN DE ROLES (Modo Oscuro)*/
-
-/*SOLO REDEFINE LAS VARIABLES QUE CAMBIAN EN OSCURO; LO DEMAS SE HEREDA DE :root
-REUTILIZABLE: #2a2a2a APARECE 4 VECES EN EL ARCHIVO. UNA VARIABLE --bg-surface-alt (CLARO: platinum, OSCURO: #2a2a2a) PERMITIRIA ELIMINAR LOS 3 BLOQUES [data-theme="dark"] DE CAJITAS Y BARRAS DE CONTROL*/
-
+/* Tema oscuro. El selector [data-theme="dark"] coincide con la etiqueta <html>
+   cuando script.js le pone data-theme="dark". Solo redefine los roles que
+   cambian; el resto (radios, fuentes, --accent-highlight, etc.) se hereda de :root.
+   Todo lo que use var() con estos roles cambia de color automáticamente. */
 [data-theme="dark"] {
     --bg-main: var(--color-onyx);
     --bg-card: #1f1f1f;
@@ -74,12 +95,13 @@ REUTILIZABLE: #2a2a2a APARECE 4 VECES EN EL ARCHIVO. UNA VARIABLE --bg-surface-a
     --accent-hover: #e0c345;
 }
 
-/*SECCION 3: BASE (ESTILOS GLOBALES DE LA PAGINA)*/
+/* ============================================================
+ * 3. BASE (ESTILOS GLOBALES DE LA PÁGINA)
+ * ============================================================ */
 
-/*ESTILOS GLOBALES DE LA PÁGINA*/
-
-/*REUTILIZABLE: font-family: var(--font-heading) SE REPITE 22 VECES Y border-radius: var(--radius-pill) 9 VECES. SI CASI TODO EL TEXTO USA INTER, SE PUEDE DECLARAR UNA SOLA VEZ AQUI (LOS <button> NO HEREDAN LA FUENTE: HARIA FALTA font-family: inherit EN button). REVISAR SI CAMBAY (--font-primary) SE USA EN ALGUN LADO*/
-
+/* Fondo, color y fuente generales. Los elementos que no declaran su propia
+   fuente heredan --font-primary de aquí. antialiased suaviza el texto en
+   navegadores basados en WebKit. */
 body {
     background-color: var(--bg-main);
     color: var(--text-primary);
@@ -88,18 +110,22 @@ body {
     -webkit-font-smoothing: antialiased;
 }
 
-/*Reset de márgenes y alturas de línea para encabezados*/
-
+/* Interlineado compacto para el logo (<h1 id="logo">) y el nombre de la app
+   (<h2 id="logotipo">), que van dentro de #brand. Los márgenes por defecto de
+   los encabezados ya los quitó el reset de la sección 1. */
 #brand h1,
 #brand h2{
 
     line-height: 1;
 }
 
-/*SECCION 4: HEADER (MARCA, MENU NAVEGACION Y USUARIO)*/
+/* ============================================================
+ * 4. HEADER (MARCA, MENÚ DE NAVEGACIÓN Y USUARIO)
+ * ============================================================ */
 
-/*HEADER (Navegación Compacta y Alineada)*/
-
+/* Barra superior de 64px de alto. Usa flexbox en fila: marca a la izquierda,
+   menú en el centro y usuario a la derecha (justify-content: space-between
+   reparte el espacio sobrante entre los tres bloques). */
 header {
     background-color: var(--bg-header);
     color: var(--text-primary);
@@ -114,7 +140,7 @@ header {
     justify-content: space-between;
 }
 
-/*BLOQUE IZQUIERDO: BRANDING / LOGO*/
+/* Bloque izquierdo: marca (logo + nombre) */
 
 #brand {
     font-family: var(--font-heading);
@@ -124,6 +150,8 @@ header {
     gap: 0.75rem;
 }
 
+/* Cuadro con la letra "D". Usa colores invertidos respecto al tema:
+   fondo con --text-primary y letra con --bg-card */
 #logo {
     width: 32px;
     height: 32px;
@@ -150,7 +178,7 @@ header {
     color: var(--text-primary);
 }
 
-/*BLOQUE CENTRO: CÁPSULA DE NAVEGACIÓN (#NAV)*/
+/* Bloque central: cápsula de navegación (<nav id="nav">) */
 
 #nav {
     background-color: var(--bg-main);
@@ -164,6 +192,8 @@ header {
     padding: 0.25rem;
 }
 
+/* Cada enlace del menú (Día, Semana, Mes) tiene forma de píldora.
+   text-transform: capitalize pone en mayúscula la primera letra de cada palabra. */
 #nav a {
     display: inline-flex;
     align-items: center;
@@ -183,6 +213,10 @@ header {
     transition: all 0.2s ease;
 }
 
+/* :hover (cursor encima) y a.active (vista actual, clase que gestiona script.js)
+   comparten la misma apariencia de "píldora encendida". Usan colores fijos
+   de la paleta (no variables de rol), por lo que se ven igual en ambos temas.
+   .active además pone el texto en negrita. */
 #nav a:hover {
     background-color: var(--color-platinum);
     color: var(--color-onyx);
@@ -194,7 +228,7 @@ header {
     font-weight: 600;
 }
 
-/*BLOQUE DERECHO: USUARIO Y BOTÓN*/
+/* Bloque derecho: usuario y botones */
 
 #login {
     font-family: var(--font-heading);
@@ -204,7 +238,8 @@ header {
     gap: 0.75rem;
 }
 
-
+/* Avatar circular (border-radius: 50%). script.js lo usa como botón para
+   cambiar el tema; cursor: pointer lo indica visualmente. */
 #avatar-display {
     text-transform: uppercase;
     background-color: var(--color-platinum);
@@ -230,6 +265,7 @@ header {
     color: var(--color-platinum);
 }
 
+/* Botón "Usuario" (id reservado para login / cerrar sesión; en script.js todavía no tiene función) */
 #logout-button {
     height: 34px;
     text-transform: uppercase;
@@ -253,20 +289,24 @@ header {
     color: var(--color-platinum);
 }
 
-/*SECCION 5: LAYOUT (CONTENEDOR Y VISTAS SPA)*/
+/* ============================================================
+ * 5. LAYOUT (CONTENEDOR PRINCIPAL Y VISTAS SPA)
+ * ============================================================ */
 
-/*CONTENEDOR PRINCIPAL (<MAIN>)*/
-
+/* <main> centra el contenido: ancho máximo de 1300px y margin: 0 auto para
+   centrarlo horizontalmente. */
 main {
-    flex: 1;
     padding: 1.5rem 2rem;
     max-width: 1300px;
     width: 100%;
     margin: 0 auto;
 }
 
-/*ESTADO DE LAS SECCIONES (SPA)*/
-
+/* Mecanismo de las vistas (SPA): toda .view-section está oculta por defecto
+   (display: none) y solo se muestra la que tiene la clase "active". script.js
+   mueve esa clase al hacer clic en el menú.
+   Ambas reglas se complementan: ".view-section.active" es más específica
+   (dos clases) y por eso reemplaza el display: none. */
 .view-section {
     display: none;
     width: 100%;
@@ -279,11 +319,14 @@ main {
     gap: 1.25rem;
 }
 
-/*SECCION 6: COMPONENTES COMUNES (TARJETAS, BOTONES, TABLAS Y ETIQUETAS)*/
+/* ============================================================
+ * 6. COMPONENTES COMUNES (TARJETAS, BOTONES, TABLAS Y ETIQUETAS)
+ * ============================================================ */
 
-/*REUTILIZABLE: box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05) SE REPITE 3 VECES (.metric-card, .card, .card-content-box): UNA VARIABLE --shadow-card LO UNIFICA
-ORDEN CRITICO: .week-header-card (SECCION 8) SOBRESCRIBE gap Y padding DE .card Y TIENEN LA MISMA ESPECIFICIDAD, POR ESO DEBE IR DESPUES*/
-
+/* Tarjeta genérica (.card): contenedor blanco (o gris oscuro en tema oscuro)
+   con esquinas redondeadas y sombra suave. Apila su contenido en columna.
+   La regla .week-header-card (sección 8) sobrescribe gap y padding de esta
+   y tiene la misma especificidad, por eso debe ir después. */
 .card {
     background-color: var(--bg-card);
     border-radius: var(--radius-card);
@@ -295,6 +338,8 @@ ORDEN CRITICO: .week-header-card (SECCION 8) SOBRESCRIBE gap Y padding DE .card 
     gap: 1rem;
 }
 
+/* "Cajita" interna dentro de una tarjeta (resúmenes "Mis pedidos" y
+   "Compañeros" de la vista Día). Fondo gris claro con contenido centrado. */
 .card-content-box {
     background-color: var(--color-platinum);
     border-radius: var(--radius-card);
@@ -307,14 +352,15 @@ ORDEN CRITICO: .week-header-card (SECCION 8) SOBRESCRIBE gap Y padding DE .card 
     align-items: center;
 }
 
-/* Estilo para ajustar las cajitas internas en modo oscuro */
-
+/* Ajuste para el tema oscuro: el gris claro de la cajita no combinaría con
+   el fondo oscuro. Este color se escribe a mano porque no existe un rol para
+   él; el selector con dos partes es más específico que .card-content-box. */
 [data-theme="dark"] .card-content-box {
     background-color: #2a2a2a;
 }
 
-/* BOTONES GLOBALES */
-
+/* Botón principal de ancho completo (por ejemplo, "Agregar Pedido").
+   Sus colores vienen de los roles --accent-*, así que cambian con el tema. */
 .basic-button {
     background-color: var(--accent-primary);
     color: var(--accent-text);
@@ -333,7 +379,8 @@ ORDEN CRITICO: .week-header-card (SECCION 8) SOBRESCRIBE gap Y padding DE .card 
     background-color: var(--accent-hover);
 }
 
-/*CABECERA DE LAS TARJETAS DE TABLA (TITULO A LA IZQUIERDA, FECHA O PERIODO A LA DERECHA)*/
+/* Cabecera de las tarjetas de tabla: título (h3) a la izquierda y fecha o
+   periodo (strong) a la derecha */
 .table-card-header {
     display: flex;
     flex-direction: row;
@@ -355,13 +402,17 @@ ORDEN CRITICO: .week-header-card (SECCION 8) SOBRESCRIBE gap Y padding DE .card 
     color: var(--text-secondary);
 }
 
-/*ESTILOS LIMPIOS Y CENTRADOS PARA LA TABLA DE CARRERAS*/
+/* Tablas (día, semana y mes). Las tres comparten estas reglas porque usan
+   selectores de etiqueta. */
 
+/* Contenedor que permite desplazar la tabla horizontalmente si no cabe
+   (útil en pantallas pequeñas) */
 .table-container {
     overflow-x: auto;
     width: 100%;
 }
 
+/* border-collapse: collapse une los bordes de celdas contiguas en una sola línea */
 table {
     width: 100%;
     border-collapse: collapse;
@@ -393,19 +444,22 @@ td {
     text-align: center;
 }
 
+/* Resalta la fila bajo el cursor con un blanco casi transparente (3 % de opacidad) */
 tbody tr:hover {
     background-color: rgba(255, 255, 255, 0.03);
 }
 
-/*COLUMNAS ESPECÍFICAS DE LA TABLA*/
-
-/*CIFRA CLAVE DE CADA TABLA (TOTAL CARRERA, PROMEDIO SEMANA, PROMEDIO MES): SE ACTIVA CON LA CLASE cell-key-figure EN EL td*/
+/* Cifra clave de cada tabla (Total Carrera, Promedio Semana, Promedio Mes).
+   Se activa agregando la clase al <td>, ya sea escrito en el HTML o generado por script.js. */
 .cell-key-figure {
     font-weight: 700;
 }
 
-/*TAGS/INSIGNIAS PARA REPARTIDORES EN LA TABLA*/
-
+/* Etiquetas (tags): insignias en forma de píldora. En la tabla del día, script.js
+   genera <span class="tag tag-green|tag-blue"> para "Yo" y "Compañero"; en las
+   tablas de semana y mes se usan para el estado. .tag define la forma y
+   .tag-green / .tag-blue / .tag-red solo el color. Sus colores son fijos
+   (no cambian con el tema). */
 .tag {
     display: inline-block;
     padding: 0.25rem 0.65rem;
@@ -414,8 +468,6 @@ tbody tr:hover {
     font-weight: 600;
     line-height: 1;
 }
-
-/*REUTILIZABLE: LOS COLORES DE TAGS (#d1fae5, #065f46, #dbeafe, #1e40af, #fee2e2, #991b1b) Y LOS DE .status-* (#10b981, #ef4444, #3b82f6) ESTAN ESCRITOS A MANO; COMO VARIABLES EN :root SE CAMBIARIAN EN UN SOLO LUGAR*/
 
 .tag-green {
     background-color: #d1fae5;
@@ -432,10 +484,12 @@ tbody tr:hover {
     color: #991b1b;
 }
 
-/*SECCION 7: VISTA DIA (METRICAS Y TABLA DEL DIA)*/
+/* ============================================================
+ * 7. VISTA DÍA (MÉTRICAS Y TABLA DEL DÍA)
+ * ============================================================ */
 
-/*ESTRUCTURA BASE DE LA GRILLA (Escritorio / PC)*/
-
+/* Cuadrícula de tarjetas de métricas: 4 columnas de igual ancho en escritorio
+   (repeat(4, 1fr)). Los media queries del final la reducen a 2 y a 1 columnas. */
 .metric-grid {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
@@ -443,6 +497,11 @@ tbody tr:hover {
     width: 100%;
 }
 
+/* Tarjeta de métrica (Pedidos, Ingresos, Promedio Día, Promedio Semana).
+   Aspecto similar a .card pero más compacta y con el contenido centrado.
+   cursor: pointer cambia el cursor a una mano al pasar sobre la tarjeta para
+   indicar que es interactiva. Por sí sola esta regla NO implementa ningún clic:
+   el comportamiento (cambiar de perspectiva) lo programa script.js. */
 .metric-card {
     background-color: var(--bg-card);
     border-radius: var(--radius-card);
@@ -453,8 +512,11 @@ tbody tr:hover {
     flex-direction: column;
     gap: 0.5rem;
     align-items: center;
+    cursor: pointer;
 }
 
+/* Partes de una tarjeta de métrica: título pequeño y gris, valor grande y
+   texto secundario. También las usan los resúmenes de .card-content-box. */
 .metric-title {
     font-family: var(--font-heading);
     font-size: 0.9rem;
@@ -474,8 +536,9 @@ tbody tr:hover {
     font-weight: 500;
 }
 
-/*CLASES DE ESTADO SEGÚN EL INDICADOR*/
-
+/* Clases de estado: solo cambian el color del texto de .metric-change
+   (verde = éxito, rojo = peligro, azul = neutro). Se asignan a mano en el
+   HTML; script.js no las modifica. Son colores fijos en ambos temas. */
 .metric-change.status-success {
     color: #10b981;
 }
@@ -488,12 +551,16 @@ tbody tr:hover {
     color: #3b82f6;
 }
 
+/* Cuerpo de la vista Día: la tabla (a la izquierda) y la tarjeta de
+   desempeño (a la derecha) en una fila. En pantallas pequeñas pasa a columna. */
 .day-body {
     display: flex;
     flex-direction: row;
     gap: 1rem;
 }
 
+/* flex: 1 hace que la tarjeta de la tabla ocupe todo el ancho sobrante; la
+   tarjeta de desempeño solo toma el ancho que necesita su contenido */
 #day-table-card {
     flex: 1;
     display: flex;
@@ -501,9 +568,12 @@ tbody tr:hover {
     gap: 1rem;
 }
 
-/*SECCION 8: VISTA SEMANA (BARRA DE CONTROL)*/
+/* ============================================================
+ * 8. VISTA SEMANA (BARRA DE CONTROL)
+ * ============================================================ */
 
-
+/* Tarjeta de selección de semana: contenido centrado en columna. Se combina con
+   .card en el HTML (class="card week-header-card") y sobrescribe su gap y padding. */
 .week-header-card {
     display: flex;
     flex-direction: column;
@@ -528,8 +598,9 @@ tbody tr:hover {
     color: var(--text-secondary);
 }
 
-/* BARRA DE CONTROL INTEGRADA (Capsule Control Bar) */
-
+/* Barra de control en forma de cápsula (inline-flex: se ajusta a su
+   contenido en lugar de ocupar todo el ancho). inset en box-shadow
+   dibuja la sombra hacia adentro. */
 .week-control-bar {
     background-color: var(--color-platinum);
     border: 1px solid var(--border-color);
@@ -542,12 +613,12 @@ tbody tr:hover {
     box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.03);
 }
 
+/* Fondo de la barra en tema oscuro (el gris claro de la regla anterior no funcionaría) */
 [data-theme="dark"] .week-control-bar {
     background-color: #2a2a2a;
 }
 
-/* Grupo interno de botones de navegación */
-
+/* Grupo interno con los tres botones de navegación (anterior, actual, siguiente) */
 .week-nav-group {
     display: flex;
     flex-direction: row;
@@ -555,18 +626,17 @@ tbody tr:hover {
     gap: 0.25rem;
 }
 
-/* Divisor sutil vertical */
-
+/* Separador vertical fino entre el grupo de navegación y el botón de búsqueda */
 .week-divider {
     width: 1px;
     height: 24px;
     background-color: var(--border-color);
 }
 
-/* BOTONES DE CONTROL GENERALES */
-
-/*ORDEN CRITICO: .btn-current-week Y .btn-search-week (Y SUS :hover) VAN DESPUES DE .w-control-btn Y SU :hover, PORQUE TIENEN LA MISMA ESPECIFICIDAD Y SOBRESCRIBEN color, background-color Y padding*/
-
+/* Botón base de los controles de semana: transparente, con efecto :hover que
+   le da fondo y sombra. Los botones .btn-current-week y .btn-search-week
+   (más abajo) tienen la misma especificidad y sobrescriben color, fondo y padding
+   por ir después de esta regla y de su :hover. */
 .w-control-btn {
     background-color: transparent;
     color: var(--text-primary);
@@ -584,6 +654,7 @@ tbody tr:hover {
     transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
+/* Tamaño del icono de Font Awesome (<i>) dentro del botón */
 .w-control-btn i {
     font-size: 0.85rem;
 }
@@ -594,8 +665,7 @@ tbody tr:hover {
     box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
 }
 
-/* Botón destacado 'Esta Semana' */
-
+/* Botón destacado "Esta Semana": usa los colores de acento (cambian con el tema) */
 .btn-current-week {
     background-color: var(--accent-primary);
     color: var(--accent-text);
@@ -607,8 +677,7 @@ tbody tr:hover {
     color: var(--accent-text);
 }
 
-/* Botón de búsqueda de semana */
-
+/* Botón "Buscar Semana": texto gris que se oscurece al pasar el cursor */
 .btn-search-week {
     color: var(--text-secondary);
 }
@@ -617,12 +686,13 @@ tbody tr:hover {
     color: var(--text-primary);
 }
 
-/*SECCION 9: VISTA MES (BARRA DE CONTROL Y CABECERA DE TABLA)*/
+/* ============================================================
+ * 9. VISTA MES (BARRA DE CONTROL Y CABECERA DE TABLA)
+ * ============================================================ */
 
-/* TARJETA SELECCIÓN DE MES */
-
-/*REDUNDANTE: EL HTML YA LE DA class="week-header-card" A ESTA TARJETA Y ESA CLASE TIENE LOS MISMOS VALORES*/
-
+/* Tarjeta de selección de mes. En el HTML esta tarjeta también tiene la clase
+   week-header-card, cuyos valores de diseño son los mismos que los de esta
+   regla; por eso esta regla repite lo que ya aplica la otra */
 #month-selection-card {
     display: flex;
     flex-direction: column;
@@ -647,8 +717,7 @@ tbody tr:hover {
     color: var(--text-secondary);
 }
 
-/* BARRA DE CONTROL INTEGRADA DEL MES (Capsule Control Bar) */
-
+/* Barra de control en cápsula de la vista Mes (mismo diseño que .week-control-bar) */
 .month-control-bar {
     background-color: var(--color-platinum);
     border: 1px solid var(--border-color);
@@ -666,7 +735,6 @@ tbody tr:hover {
 }
 
 /* Grupo interno de navegación por meses */
-
 .month-nav-group {
     display: flex;
     flex-direction: row;
@@ -674,16 +742,15 @@ tbody tr:hover {
     gap: 0.25rem;
 }
 
-/* Divisor sutil vertical */
-
+/* Separador vertical fino */
 .month-divider {
     width: 1px;
     height: 24px;
     background-color: var(--border-color);
 }
 
-/* BOTONES DE CONTROL DE MESES */
-
+/* Botón base de los controles de mes (mismo diseño que .w-control-btn).
+   .btn-current-month y .btn-search-month van después y lo sobrescriben. */
 .month-control-btn {
     background-color: transparent;
     color: var(--text-primary);
@@ -711,8 +778,7 @@ tbody tr:hover {
     box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
 }
 
-/* Botón destacado 'Este Mes' */
-
+/* Botón destacado "Este Mes" */
 .btn-current-month {
     background-color: var(--accent-primary);
     color: var(--accent-text);
@@ -724,8 +790,7 @@ tbody tr:hover {
     color: var(--accent-text);
 }
 
-/* Botón de búsqueda de mes */
-
+/* Botón "Buscar Mes" */
 .btn-search-month {
     color: var(--text-secondary);
 }
@@ -735,41 +800,44 @@ tbody tr:hover {
 }
 
 
-/*SECCION 10: RESPONSIVE (MEDIA QUERIES, SIEMPRE AL FINAL)*/
+/* ============================================================
+ * 10. RESPONSIVE (MEDIA QUERIES, SIEMPRE AL FINAL)
+ * ============================================================
+ * Un media query aplica sus reglas solo cuando la pantalla cumple la
+ * condición (aquí, ancho máximo). Estas reglas tienen la misma especificidad
+ * que las reglas base y las sobrescriben solo por estar después de ellas.
+ * Se ordenan de mayor a menor ancho (900, 768, 480). Una pantalla de 400px
+ * cumple los tres, y la última regla aplicable gana.
+ */
 
-/*MEDIA QUERIES (RESPONSIVE)*/
-
-/*Pantallas medianas (Tablets: menor a 900px)*/
-
-/*SIEMPRE AL FINAL: LAS REGLAS DE AQUI TIENEN LA MISMA ESPECIFICIDAD QUE LAS BASE Y SOLO LAS SOBRESCRIBEN POR ESTAR DESPUES. SE ORDENAN DE MAYOR A MENOR ANCHO (900, 768, 480) PORQUE .metric-grid SE REDEFINE EN 900 Y OTRA VEZ EN 480*/
-
+/* Tablets (hasta 900px): la cuadrícula de métricas pasa de 4 a 2 columnas */
 @media (max-width: 900px) {
     .metric-grid {
         grid-template-columns: repeat(2, 1fr);
     }
 }
 
-/*Pantallas pequeñas (Celulares: menor a 768px)*/
-
-/* DUPLICADO: LOS BLOQUES .week-control-bar Y .month-control-bar DE ESTA MEDIA QUERY SON IGUALES; CON CLASES GENERICAS SE ESCRIBIRIAN UNA SOLA VEZ*/
-
+/* Celulares (hasta 768px): el header se apila en columna, la vista Día pasa a
+   una sola columna, las tablas se compactan y las barras de control de
+   semana y mes se vuelven verticales. Los bloques de .week-* y .month-* de
+   aquí tienen los mismos valores. */
 @media (max-width: 768px) {
     header {
         height: auto;
         /* Permite que el header crezca verticalmente */
         padding: 0.85rem 1rem;
-        /* Reducimos el padding lateral */
+        /* Reduce el padding lateral */
         flex-direction: column;
-        /* Apilamos los bloques en columna */
+        /* Apila los bloques en columna */
         gap: 0.75rem;
     }
 
-    /* Ocultamos el texto secundario del logo en móviles si el espacio es muy reducido */
+    /* Texto de la marca un poco más pequeño */
     #logotipo {
         font-size: 0.95rem;
     }
 
-    /* La cápsula de navegación ocupa el ancho máximo en pantallas chicas */
+    /* La cápsula de navegación ocupa el ancho completo */
     #nav {
         width: 100%;
         justify-content: space-around;
@@ -777,29 +845,31 @@ tbody tr:hover {
 
     #nav a {
         padding: 0.4rem 0.75rem;
-        /* Reducimos el relleno de las píldoras */
+        /* Reduce el relleno de las píldoras */
         font-size: 0.8rem;
     }
 
     #login {
         width: 100%;
         justify-content: center;
-        /* Centramos la sección de usuario */
+        /* Centra la zona de usuario */
     }
 
-    /* 1. Apila el contenedor de la tabla y la tarjeta de desempeño verticalmente */
+    /* Apila verticalmente la tarjeta de la tabla y la de desempeño */
     .day-body {
         flex-direction: column;
         width: 100%;
     }
 
-    /* 2. Ajusta el tamaño de celda para que la tabla sea más compacta en celulares */
+    /* Celdas más compactas para que la tabla quepa mejor */
     th,
     td {
         padding: 0.5rem 0.4rem;
         font-size: 0.75rem;
     }
 
+    /* Barra de control de semana vertical: ocupa todo el ancho, con esquinas
+       de tarjeta en lugar de forma de píldora y el divisor en horizontal */
     .week-control-bar {
         flex-direction: column;
         width: 100%;
@@ -822,6 +892,7 @@ tbody tr:hover {
         justify-content: center;
     }
 
+    /* Mismos ajustes para la barra de control de mes */
     .month-control-bar {
         flex-direction: column;
         width: 100%;
@@ -845,8 +916,7 @@ tbody tr:hover {
     }
 }
 
-/*Teléfonos pequeños (menor a 480px)*/
-
+/* Teléfonos pequeños (hasta 480px): la cuadrícula de métricas pasa a 1 columna */
 @media (max-width: 480px) {
     .metric-grid {
         grid-template-columns: 1fr;

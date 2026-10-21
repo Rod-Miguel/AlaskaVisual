@@ -1,105 +1,136 @@
 <!DOCTYPE html>
-<!-- DELIVERY ANALYTICS DASHBOARD: PAGINA UNICA (SPA) CON 3 VISTAS (DIA, SEMANA, MES). ESTILOS EN styles.css Y LOGICA EN script.js. EL ATRIBUTO data-theme DE <html> ES EL TEMA ACTIVO (light / dark) Y LO CAMBIA script.js -->
+<!--
+    DELIVERY ANALYTICS DASHBOARD - index.html
+
+    Página única (SPA, Single Page Application) con tres vistas: Día, Semana y Mes.
+    Las tres vistas están escritas aquí en el HTML; solo una tiene la clase "active"
+    y se ve a la vez. Cambiar de vista es solo mover esa clase (lo hace script.js).
+
+    Archivos relacionados:
+      - styles.css : apariencia, temas y diseño adaptable.
+      - script.js  : lógica (navegación, tema, tabla del día y tarjetas de métricas).
+
+    Estructura del documento:
+      <head>   metadatos, fuentes, hoja de estilos e iconos
+      <header> marca, menú de navegación y botones de usuario
+      <main>   vista Día (#view-day), vista Semana (#view-week) y vista Mes (#view-month)
+      <script> script.js al final del <body>
+
+    Atributo data-theme de la etiqueta <html>: guarda el tema activo ("light" u "dark").
+    Empieza en "light" y script.js lo alterna; styles.css cambia los colores según su valor.
+-->
 <html lang="es" data-theme="light">
 
 <head>
     <meta charset="UTF-8">
+    <!-- Hace que la página se ajuste al ancho real de la pantalla en celulares (base del diseño adaptable) -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Delivery Analytics Dashboard</title>
 
-    <!-- Conexiones previas para acelerar la descarga desde los servidores de Google -->
+    <!-- Conexión anticipada a los servidores de Google Fonts para que las fuentes carguen más rápido -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 
-    <!-- Importación correcta de Cambay e Inter con sus pesos especificados (Regular, Medium, Semibold, Bold) -->
+    <!-- Fuentes Cambay (400, 700) e Inter (400, 500, 600, 700). styles.css las usa mediante las variables font-primary y font-heading -->
     <link
         href="https://fonts.googleapis.com/css2?family=Cambay:wght@400;700&family=Inter:wght@400;500;600;700&display=swap"
         rel="stylesheet">
 
-    <!-- HOJA DE ESTILOS PROPIA: VARIABLES, COMPONENTES Y RESPONSIVE -->
+    <!-- Hoja de estilos propia del proyecto -->
     <link rel="stylesheet" href="styles.css">
 
-    <!-- ICONOS FONT AWESOME: SE USAN COMO <i class="fa-solid fa-..."> EN LOS BOTONES DE SEMANA Y MES -->
+    <!-- Font Awesome: biblioteca de iconos. Los botones de Semana y Mes los usan con <i class="fa-solid fa-...">. Se carga después de styles.css -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 
 <body>
-    <!-- HEADER CON NAVEGACIÓN SPA Y DENSIDAD COMPACTA -->
+    <!-- ENCABEZADO: marca (izquierda), menú de navegación (centro) y usuario (derecha) -->
     <header>
-        <!-- 1. Marca / Logo -->
+        <!-- Marca: #logo es el cuadro con la letra y #logotipo es el nombre de la app (solo presentación) -->
         <div id="brand">
             <h1 id="logo">D</h1>
             <h2 id="logotipo">delivery analytics</h2>
         </div>
 
-        <!-- 2. Navegación Principal (Filtros de Vista / Píldora) -->
+        <!-- Menú de navegación. script.js lo busca con "#nav a" -->
         <nav id="nav">
-            <!-- href SIN EL # ES LA CLAVE DEL DICCIONARIO vistas EN script.js. LA CLASE active MARCA LA PILDORA DE LA VISTA ACTUAL -->
+            <!-- El href sin el "#" ("dia", "semana", "mes") es la clave del diccionario "vistas" de script.js, que lo traduce al id de una sección.
+                 La clase "active" marca la píldora de la vista actual; script.js la mueve al hacer clic -->
             <a href="#dia" class="active">Día</a>
             <a href="#semana">Semana</a>
             <a href="#mes">Mes</a>
         </nav>
 
-        <!-- 3. Área de Usuario / Login -->
+        <!-- Zona de usuario -->
         <div id="login">
-            <!-- AVATAR: BOTON QUE ALTERNA EL MODO CLARO / OSCURO (script.js) -->
+            <!-- Avatar: script.js lo usa como botón para alternar el tema claro / oscuro (cambia data-theme en <html>) -->
             <button id="avatar-display" title="Cambiar tema">MR</button>
-            <!-- BOTON DE USUARIO: SIN FUNCION TODAVIA, RESERVADO PARA EL LOGIN / CERRAR SESION -->
+            <!-- Botón de usuario: script.js no lo referencia, por ahora no hace nada (id reservado para login / cerrar sesión según el plan del proyecto) -->
             <button id="logout-button">Usuario</button>
         </div>
     </header>
-    <!-- CONTENIDO PRINCIPAL: LAS 3 VISTAS ESTAN EN EL HTML Y SOLO UNA TIENE LA CLASE active. script.js SE ENCARGA DE CAMBIARLA -->
-    <main>
-        <!-- SECCIONES DE VISTA DE DÍA, SEMANA Y MES CON MÉTRICAS Y ESTILOS DE TARJETA -->
 
-        <!-- SECCION DIA -->
+    <!-- CONTENIDO PRINCIPAL: tres secciones con la clase "view-section". Solo la que tiene "active" se muestra.
+         script.js las encuentra con ".view-section" y mueve la clase "active" -->
+    <main>
+
+        <!-- ========== VISTA DÍA (id "view-day": es el valor que usa el diccionario "vistas" para "dia") ========== -->
         <section id="view-day" class="view-section active">
 
-            <!-- GRID DE MÉTRICAS -->
+            <!-- Cuadrícula de 4 tarjetas de métricas (4 columnas en escritorio, 2 en tablet, 1 en celular).
+                 Cada .metric-card tiene un listener de clic en script.js y un atributo data-perspectiva
+                 que guarda su perspectiva actual ("user" = mis datos, "coworkers" = compañeros, "team" = equipo).
+                 Como cada tarjeta guarda su propia perspectiva, funcionan de forma independiente -->
             <div class="metric-grid">
-                <div class="metric-card">
+                <!-- Tarjeta Pedidos: script.js la identifica por id="card-order" y escribe la cantidad en #metric-orders -->
+                <div id="card-order" class="metric-card" data-perspectiva="user">
                     <h3 class="metric-title">Pedidos</h3>
-                    <!-- LOS id metric-* LOS USA script.js. EL TEXTO DE ADENTRO ES UN VALOR DE RELLENO QUE JS REEMPLAZA AL CARGAR -->
-                    <p id="metric-orders" class="metric-value">6</p>
-                    <!-- TEXTO FIJO: PENDIENTE DE CALCULAR CON LOS DATOS DE AYER (PASO 7) -->
+                    <!-- Vacío a propósito: script.js escribe aquí el número de pedidos al cargar y al hacer clic -->
+                    <p id="metric-orders" class="metric-value"></p>
+                    <!-- Texto fijo escrito a mano: no se calcula con datos ni cambia con la perspectiva (comparación con ayer pendiente) -->
                     <span class="metric-change status-success">+2 desde ayer</span>
                 </div>
 
-                <!-- CARD DE MÉTRICA DE INGRESOS -->
-                <div class="metric-card">
+                <!-- Tarjeta Ingresos: id="card-income" -->
+                <div id="card-income" class="metric-card" data-perspectiva="user">
                     <h3 class="metric-title">Ingresos</h3>
+                    <!-- "12$" es un valor de relleno: script.js lo reemplaza al cargar -->
                     <p id="metric-income" class="metric-value">12$</p>
                     <span class="metric-change status-neutral">Cliente + local</span>
                 </div>
 
-                <!-- CARD DE MÉTRICA DE PROMEDIO DIA -->
-                <div class="metric-card">
+                <!-- Tarjeta Promedio Día: id="card-average" -->
+                <div id="card-average" class="metric-card" data-perspectiva="user">
                     <h3 class="metric-title">Promedio Dia</h3>
+                    <!-- "5.13$" es un valor de relleno: script.js lo reemplaza al cargar -->
                     <p id="metric-average" class="metric-value">5.13$</p>
                     <span class="metric-change status-danger">Promedio</span>
                 </div>
 
-                <!-- CARD DE MÉTRICA DE PROMEDIO SEMANA -->
-                <div class="metric-card">
+                <!-- Tarjeta Promedio Semana: marcador de posición. script.js le agrega el listener de clic
+                     (porque tiene la clase metric-card), pero no escribe nada en #metric-average-week:
+                     su valor "P/D" (pendiente) y su texto son fijos -->
+                <div id="card-average-week" class="metric-card" data-perspectiva="user">
                     <h3 class="metric-title">Promedio Semana</h3>
-                    <!-- P/D = PENDIENTE: PROMEDIO SEMANA NECESITA DATOS DE VARIOS DIAS (PASO 7). -->
                     <p id="metric-average-week" class="metric-value">P/D</p>
                     <span class="metric-change status-neutral">Acumulado(2dias)</span>
                 </div>
             </div>
 
-            <!-- CUERPO DE DÍA CON LISTA DE PEDIDOS -->
+            <!-- Cuerpo de la vista Día: tabla de carreras a la izquierda y desempeño del turno a la derecha
+                 (en celulares se apilan en columna) -->
             <div class="day-body">
 
-                <!-- TARJETA PEDIDOS DETALLADOS -->
+                <!-- Tarjeta con la tabla de carreras del día -->
                 <div id="day-table-card" class="card">
+                    <!-- Cabecera: título a la izquierda y fecha a la derecha -->
                     <div id="deliveries-day-table" class="table-card-header">
                         <h3>Detalle de Carreras de Hoy</h3>
-                        <!-- FECHA FIJA DE EJEMPLO: PENDIENTE DE GENERARLA CON JS -->
+                        <!-- Fecha escrita a mano: script.js no la genera ni la modifica -->
                         <strong id="current-date">15 Oct 2026</strong>
                     </div>
 
-                    <!-- TABLA PEDIDOS -->
+                    <!-- El contenedor permite desplazamiento horizontal si la tabla no cabe en pantallas pequeñas -->
                     <div class="table-container">
                         <table>
                             <thead>
@@ -112,7 +143,7 @@
                                     <th>Repartidor</th>
                                 </tr>
                             </thead>
-                            <!-- VACIO A PROPOSITO: script.js DIBUJA UNA FILA <tr> POR CADA PEDIDO -->
+                            <!-- Vacío a propósito: script.js agrega aquí una fila <tr> por cada pedido, con las 6 celdas en el mismo orden que las columnas de arriba -->
                             <tbody id="deliveries-table-body">
                             </tbody>
                         </table>
@@ -121,50 +152,51 @@
 
                 </div>
 
-                <!-- TARJETA DESEMPEÑO DEL TURNO -->
+                <!-- Tarjeta de desempeño del turno: resume pedidos y dinero del usuario y de sus compañeros -->
                 <div class="card">
                     <h3>Desempeño del turno</h3>
-                    <!-- CAJITA DESEMPEÑO PROPIO -->
+                    <!-- Resumen del usuario actual. Sus textos ("6" y "25$ acumulados") son de relleno: script.js los reemplaza -->
                     <div class="card-content-box">
-                        <!-- LOS id mine-* Y them-* LOS USA script.js: CANTIDAD Y DINERO ACUMULADO DE USUARIO_ACTUAL Y DE SUS COMPANEROS (EL TEXTO ES DE RELLENO) -->
                         <h3 class="metric-title">Mis pedidos</h3>
                         <p id="mine-orders" class="metric-value">6</p>
                         <span id="mine-income" class="metric-change status-success">25$ acumulados</span>
                     </div>
 
+                    <!-- Resumen de los compañeros. Sus textos ("8" y "30$ acumulados") son de relleno: script.js los reemplaza -->
                     <div class="card-content-box">
                         <h3 class="metric-title">Compañeros</h3>
                         <p id="them-orders" class="metric-value">8</p>
                         <span id="them-income" class="metric-change status-success">30$ acumulados</span>
                     </div>
-                    <!-- BOTON AGREGAR PEDIDO -->
-                    <!-- RESERVADO: SIN CLIC TODAVIA, ABRIRA EL FORMULARIO DE NUEVO PEDIDO (PASO 4) -->
+                    <!-- Botón reservado: script.js no lo referencia, por ahora no hace nada (según el plan del proyecto, abrirá el formulario de nuevo pedido) -->
                     <button class="basic-button" id="add-delivery-button">Agregar Pedido</button>
                 </div>
             </div>
         </section>
 
-        <!-- SECCION SEMANA -->
+        <!-- ========== VISTA SEMANA (id "view-week") ==========
+             Todo el contenido de esta vista es estático por ahora: script.js no usa ningún elemento de aquí dentro,
+             salvo la clase "view-section" de la sección completa -->
         <section id="view-week" class="view-section">
 
-            <!-- TARJETA SELECCION DE SEMANA REDISEÑADA Y MODERNA -->
+            <!-- Tarjeta con título y barra de controles para elegir la semana -->
             <div id="week-selection-card" class="card week-header-card">
 
-                <!-- ENCABEZADO Y TÍTULO -->
                 <div class="week-card-title">
                     <h3>Detalle de Carreras de la Semana</h3>
                     <span class="week-subtitle">Navega o busca el historial semanal</span>
                 </div>
 
-                <!-- BARRA INTEGRADA DE CONTROLES (Segmented Control) -->
+                <!-- Barra en forma de cápsula con los botones de control -->
                 <div class="week-control-bar">
-                    <!-- Grupo de Navegación por Semanas -->
+                    <!-- Navegación entre semanas: anterior, actual y siguiente -->
                     <div class="week-nav-group">
-                        <!-- LOS BOTONES DE SEMANA Y SUS id ESTAN RESERVADOS: SE PROGRAMAN EN EL PASO 7 -->
+                        <!-- Botones reservados: tienen id pero script.js todavía no les asigna ninguna función (title es el texto que aparece al pasar el cursor) -->
                         <button class="w-control-btn" id="prev-week-button" title="Semana anterior">
                             <i class="fa-solid fa-chevron-left"></i>
                         </button>
 
+                        <!-- btn-current-week le da el estilo destacado al botón de la semana actual -->
                         <button class="w-control-btn btn-current-week" id="current-week-button"
                             title="Ir a semana actual">
                             <i class="fa-solid fa-rotate-left"></i>
@@ -176,9 +208,10 @@
                         </button>
                     </div>
 
+                    <!-- Línea separadora vertical (solo decorativa, estilo en styles.css) -->
                     <div class="week-divider"></div>
 
-                    <!-- Botón de Búsqueda / Selección manual -->
+                    <!-- Botón reservado para buscar una semana específica -->
                     <button class="w-control-btn btn-search-week" id="select-week-button"
                         title="Buscar por fecha especifica">
                         <i class="fa-solid fa-magnifying-glass"></i>
@@ -188,14 +221,14 @@
 
             </div>
 
-            <!-- TARJETA DE TABLA DE SEMANA -->
+            <!-- Tarjeta con la tabla resumen por semanas -->
             <div id="week-table-card" class="card">
                 <div id="deliveries-week-table" class="table-card-header">
                     <h3>Resumen Histórico por Semanas</h3>
+                    <!-- Texto fijo: script.js no lo modifica -->
                     <strong id="current-week">Semana 42</strong>
                 </div>
 
-                <!-- TABLA PEDIDOS -->
                 <div class="table-container">
                     <table>
                         <thead>
@@ -208,7 +241,7 @@
                                 <th>Estado</th>
                             </tr>
                         </thead>
-                        <!-- FILAS DE EJEMPLO ESTATICAS: SE REEMPLAZARAN POR DATOS REALES AGRUPADOS POR SEMANA (PASO 7) -->
+                        <!-- Las tres filas son ejemplos escritos a mano (no vienen de pedidos). Las clases tag-green, tag-blue y tag-red solo cambian el color de la etiqueta de estado -->
                         <tbody id="deliveries-table-body-week">
                             <tr>
                                 <td>42</td>
@@ -240,27 +273,30 @@
             </div>
         </section>
 
-        <!-- SECCION MES -->
+        <!-- ========== VISTA MES (id "view-month") ==========
+             Igual que la vista Semana: contenido estático por ahora, sin elementos usados por script.js
+             salvo la clase "view-section" de la sección completa -->
         <section id="view-month" class="view-section">
 
-            <!-- TARJETA SELECCION DE MES -->
+            <!-- Tarjeta con título y barra de controles para elegir el mes.
+                 Reutiliza la clase "week-header-card" de la vista Semana además de "card" -->
             <div id="month-selection-card" class="card week-header-card">
 
-                <!-- ENCABEZADO Y TÍTULO -->
                 <div class="month-card-title">
                     <h3>Detalle de Carreras del Mes</h3>
                     <span class="month-subtitle">Navega o busca el historial mensual</span>
                 </div>
 
-                <!-- BARRA INTEGRADA DE CONTROLES (Segmented Control) -->
+                <!-- Barra en forma de cápsula con los botones de control (misma estructura que la de Semana, con clases month-*) -->
                 <div class="month-control-bar">
-                    <!-- Grupo de Navegación por Meses -->
+                    <!-- Navegación entre meses: anterior, actual y siguiente -->
                     <div class="month-nav-group">
-                        <!-- LOS BOTONES DE MES Y SUS id ESTAN RESERVADOS: SE PROGRAMAN EN EL PASO 7 -->
+                        <!-- Botones reservados: tienen id pero script.js todavía no les asigna ninguna función -->
                         <button class="month-control-btn" id="prev-month-button" title="Mes anterior">
                             <i class="fa-solid fa-chevron-left"></i>
                         </button>
 
+                        <!-- btn-current-month le da el estilo destacado al botón del mes actual -->
                         <button class="month-control-btn btn-current-month" id="current-month-button"
                             title="Ir a mes actual">
                             <i class="fa-solid fa-rotate-left"></i>
@@ -272,9 +308,10 @@
                         </button>
                     </div>
 
+                    <!-- Línea separadora vertical (solo decorativa) -->
                     <div class="month-divider"></div>
 
-                    <!-- Botón de Búsqueda / Selección manual -->
+                    <!-- Botón reservado para buscar un mes específico -->
                     <button class="month-control-btn btn-search-month" id="select-month-button"
                         title="Buscar por fecha especifica">
                         <i class="fa-solid fa-magnifying-glass"></i>
@@ -284,14 +321,14 @@
 
             </div>
 
-            <!-- TARJETA DE TABLA DE MES -->
+            <!-- Tarjeta con la tabla resumen por meses -->
             <div id="month-table-card" class="card">
                 <div id="deliveries-month-table" class="table-card-header">
                     <h3>Resumen Histórico por Meses</h3>
+                    <!-- Texto fijo: script.js no lo modifica -->
                     <strong id="current-month">2026</strong>
                 </div>
 
-                <!-- TABLA PEDIDOS -->
                 <div class="table-container">
                     <table>
                         <thead>
@@ -304,7 +341,7 @@
                                 <th>Estado</th>
                             </tr>
                         </thead>
-                        <!-- FILAS DE EJEMPLO ESTATICAS: SE REEMPLAZARAN POR DATOS REALES AGRUPADOS POR MES (PASO 7) -->
+                        <!-- Las tres filas son ejemplos escritos a mano (no vienen de pedidos) -->
                         <tbody id="deliveries-table-body-month">
                             <tr>
                                 <td>Ene</td>
@@ -337,7 +374,7 @@
 
         </section>
     </main>
-    <!-- SCRIPT AL FINAL DEL body: ASI TODO EL HTML YA EXISTE CUANDO JS LO BUSCA CON getElementById / querySelector -->
+    <!-- El script va al final del <body> para que todo el HTML ya exista cuando script.js busca elementos con getElementById / querySelector -->
     <script src="script.js"></script>
 </body>
 
