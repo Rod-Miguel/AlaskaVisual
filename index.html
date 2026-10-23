@@ -1,5 +1,10 @@
 <!DOCTYPE html>
-<!--
+<html lang="es" data-theme="light">
+
+<head>
+    <meta charset="UTF-8">
+    <!-- La codificación (charset) va siempre primero en <head>: el navegador solo revisa los primeros 1024 bytes del archivo para saber cómo leer los caracteres. Por eso el comentario grande de abajo va después -->
+    <!--
     DELIVERY ANALYTICS DASHBOARD - index.html
 
     Página única (SPA, Single Page Application) con tres vistas: Día, Semana y Mes.
@@ -12,6 +17,7 @@
 
     Estructura del documento:
       <head>   metadatos, fuentes, hoja de estilos e iconos
+      <body>   empieza con el sprite de íconos SVG (oculto)
       <header> marca, menú de navegación y botones de usuario
       <main>   vista Día (#view-day), vista Semana (#view-week) y vista Mes (#view-month)
       <script> script.js al final del <body>
@@ -19,10 +25,7 @@
     Atributo data-theme de la etiqueta <html>: guarda el tema activo ("light" u "dark").
     Empieza en "light" y script.js lo alterna; styles.css cambia los colores según su valor.
 -->
-<html lang="es" data-theme="light">
 
-<head>
-    <meta charset="UTF-8">
     <!-- Hace que la página se ajuste al ancho real de la pantalla en celulares (base del diseño adaptable) -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Delivery Analytics Dashboard</title>
@@ -44,6 +47,27 @@
 </head>
 
 <body>
+
+    <!-- Sprite de íconos SVG: un "catálogo" de dibujos que se define una sola vez y se reutiliza.
+         Un <symbol> no se dibuja por sí mismo; cada tarjeta lo muestra con <use href="#icono-dedito">.
+         display: none evita que el catálogo ocupe espacio, y aria-hidden lo oculta a los lectores de pantalla.
+         El viewBox (0 0 24 24) es el lienzo en que está trazado el dibujo: así el ícono escala a cualquier tamaño -->
+
+    <svg style="display: none" aria-hidden="true">
+        <symbol id="icono-dedito" viewBox="0 0 24 24">
+            <path d="M8 13v-8.5a1.5 1.5 0 0 1 3 0v7.5" />
+            <path d="M11 11.5v-2a1.5 1.5 0 1 1 3 0v2.5" />
+            <path d="M14 10.5a1.5 1.5 0 0 1 3 0v1.5" />
+            <path
+                d="M17 11.5a1.5 1.5 0 0 1 3 0v4.5a6 6 0 0 1 -6 6h-2h.208a6 6 0 0 1 -5.012 -2.7l-.196 -.3c-.312 -.479 -1.407 -2.388 -3.286 -5.728a1.5 1.5 0 0 1 .536 -2.022a1.867 1.867 0 0 1 2.28 .28l1.47 1.47" />
+            <path d="M5 3l-1 -1" />
+            <path d="M4 7h-1" />
+            <path d="M14 3l1 -1" />
+            <path d="M15 6h1" />
+        </symbol>
+    </svg>
+
+
     <!-- ENCABEZADO: marca (izquierda), menú de navegación (centro) y usuario (derecha) -->
     <header>
         <!-- Marca: #logo es el cuadro con la letra y #logotipo es el nombre de la app (solo presentación) -->
@@ -82,38 +106,130 @@
                  que guarda su perspectiva actual ("user" = mis datos, "coworkers" = compañeros, "team" = equipo).
                  Como cada tarjeta guarda su propia perspectiva, funcionan de forma independiente -->
             <div class="metric-grid">
-                <!-- Tarjeta Pedidos: script.js la identifica por id="card-order" y escribe la cantidad en #metric-orders -->
+                <!-- Tarjeta Pedidos: script.js la identifica por id="card-order" y escribe la cantidad en #metric-orders.
+                     Las 4 tarjetas tienen la misma estructura:
+                       1. Ícono del dedito (posición absoluta, arriba a la derecha)
+                       2. .card-data: grupo de datos (título con etiqueta, valor y pie)
+                       3. .card-control: grupo de control (puntos de ciclo y pista)
+                     El color de la etiqueta y del punto activo lo toma styles.css de data-perspectiva -->
                 <div id="card-order" class="metric-card" data-perspectiva="user">
-                    <h3 class="metric-title">Pedidos</h3>
-                    <!-- Vacío a propósito: script.js escribe aquí el número de pedidos al cargar y al hacer clic -->
-                    <p id="metric-orders" class="metric-value"></p>
-                    <!-- Texto fijo escrito a mano: no se calcula con datos ni cambia con la perspectiva (comparación con ayer pendiente) -->
-                    <span class="metric-change status-success">+2 desde ayer</span>
+
+                    <!-- Ícono del dedito: <use> dibuja el símbolo #icono-dedito del sprite del inicio del body.
+                         aria-hidden porque es decorativo. Su posición y su color gris están en styles.css (.icono-dedito) -->
+                    <svg class="icono-dedito" width="18.5" height="18.5" aria-hidden="true">
+                        <use href="#icono-dedito"></use>
+                    </svg>
+
+                    <!-- GRUPO DE DATOS -->
+                    <div class="card-data">
+                        <!-- Fila de título y etiqueta de perspectiva (se alinean en una línea con flex en styles.css).
+                             El texto "· Yo" es fijo por ahora: script.js todavía no lo cambia al hacer clic.
+                             Solo su color cambia, porque styles.css lo toma de data-perspectiva -->
+                        <div class="card-title-tag">
+                            <h3 class="metric-title">Pedidos</h3>
+                            <p id="metric-order-tag" class="metric-state">· Yo</p>
+                        </div>
+                        <!-- Vacío a propósito: script.js escribe aquí el número de pedidos al cargar y al hacer clic -->
+                        <p id="metric-orders" class="metric-value"></p>
+                        <!-- Pie: texto fijo escrito a mano. No se calcula con datos ni cambia con la perspectiva (comparación con ayer pendiente) -->
+                        <span class="metric-change status-success">+2 desde ayer</span>
+                    </div>
+
+                    <!-- GRUPO DE CONTROL -->
+                    <div class="card-control">
+                        <!-- Puntos de ciclo: uno por perspectiva (Yo, Compañeros, Equipo). Por ahora están escritos a mano
+                             para poder darles estilo; script.js todavía no los crea ni mueve la clase "active",
+                             que marca el punto de la perspectiva actual -->
+                        <div class="card-dots">
+                            <span class="card-dot active"></span><span class="card-dot"></span><span
+                                class="card-dot"></span>
+                        </div>
+                        <!-- Pista de interacción. Pendiente: que script.js la atenúe después del primer clic -->
+                        <p class="card-hint">Pulsa para cambiar</p>
+                    </div>
+
                 </div>
 
-                <!-- Tarjeta Ingresos: id="card-income" -->
+                <!-- Tarjeta Ingresos: id="card-income". Misma estructura que Pedidos; script.js escribe el valor en #metric-income ("12$" es relleno) -->
                 <div id="card-income" class="metric-card" data-perspectiva="user">
-                    <h3 class="metric-title">Ingresos</h3>
-                    <!-- "12$" es un valor de relleno: script.js lo reemplaza al cargar -->
-                    <p id="metric-income" class="metric-value">12$</p>
-                    <span class="metric-change status-neutral">Cliente + local</span>
+
+                    <svg class="icono-dedito" width="18.5" height="18.5" aria-hidden="true">
+                        <use href="#icono-dedito"></use>
+                    </svg>
+
+                    <div class="card-data">
+                        <div class="card-title-tag">
+                            <h3 class="metric-title">Ingresos</h3>
+                            <p id="metric-income-tag" class="metric-state">· Yo</p>
+                        </div>
+                        <p id="metric-income" class="metric-value">12$</p>
+                        <!-- Pie fijo; status-neutral lo pinta de azul -->
+                        <span class="metric-change status-neutral">Cliente + local</span>
+                    </div>
+
+                    <div class="card-control">
+                        <div class="card-dots">
+                            <span class="card-dot active"></span><span class="card-dot"></span><span
+                                class="card-dot"></span>
+                        </div>
+                        <p class="card-hint">Pulsa para cambiar</p>
+                    </div>
+
                 </div>
 
-                <!-- Tarjeta Promedio Día: id="card-average" -->
+                <!-- Tarjeta Promedio Día: id="card-average". Misma estructura; script.js escribe el valor en #metric-average ("5.13$" es relleno) -->
                 <div id="card-average" class="metric-card" data-perspectiva="user">
-                    <h3 class="metric-title">Promedio Dia</h3>
-                    <!-- "5.13$" es un valor de relleno: script.js lo reemplaza al cargar -->
-                    <p id="metric-average" class="metric-value">5.13$</p>
-                    <span class="metric-change status-danger">Promedio</span>
+
+                    <svg class="icono-dedito" width="18.5" height="18.5" aria-hidden="true">
+                        <use href="#icono-dedito"></use>
+                    </svg>
+
+                    <div class="card-data">
+                        <div class="card-title-tag">
+
+                            <h3 class="metric-title">Promedio Dia</h3>
+                            <p id="metric-average-tag" class="metric-state">· Yo</p>
+
+                        </div>
+                        <p id="metric-average" class="metric-value">5.13$</p>
+                        <!-- Pie fijo; status-danger lo pinta de rojo -->
+                        <span class="metric-change status-danger">Promedio</span>
+                    </div>
+
+                    <div class="card-control">
+                        <div class="card-dots">
+                            <span class="card-dot active"></span><span class="card-dot"></span><span
+                                class="card-dot"></span>
+                        </div>
+                        <p class="card-hint">Pulsa para cambiar</p>
+                    </div>
                 </div>
 
                 <!-- Tarjeta Promedio Semana: marcador de posición. script.js le agrega el listener de clic
                      (porque tiene la clase metric-card), pero no escribe nada en #metric-average-week:
                      su valor "P/D" (pendiente) y su texto son fijos -->
                 <div id="card-average-week" class="metric-card" data-perspectiva="user">
-                    <h3 class="metric-title">Promedio Semana</h3>
-                    <p id="metric-average-week" class="metric-value">P/D</p>
-                    <span class="metric-change status-neutral">Acumulado(2dias)</span>
+
+                    <svg class="icono-dedito" width="18.5" height="18.5" aria-hidden="true">
+                        <use href="#icono-dedito"></use>
+                    </svg>
+
+                    <div class="card-data">
+                        <div class="card-title-tag">
+                            <h3 class="metric-title">Promedio Semana</h3>
+                            <p id="metric-average-week-tag" class="metric-state">· Yo</p>
+                        </div>
+                        <p id="metric-average-week" class="metric-value">P/D</p>
+                        <span class="metric-change status-neutral">Acumulado(2dias)</span>
+                    </div>
+
+                    <div class="card-control">
+                        <div class="card-dots">
+                            <span class="card-dot active"></span><span class="card-dot"></span><span
+                                class="card-dot"></span>
+                        </div>
+                        <p class="card-hint">Pulsa para cambiar</p>
+                    </div>
                 </div>
             </div>
 

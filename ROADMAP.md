@@ -36,6 +36,14 @@ Primero todo funciona en el navegador guardando en `localStorage`. Después se m
 - [X] 1. **Modo claro / oscuro:** botón en el header que alterna `data-theme="dark"`
 - [X] 2. **Los datos como datos:** un arreglo de objetos (un pedido = un objeto aporte cliente, aporte restaurante, repartidor) y JS que dibuja la tabla a partir de él
 - [X] 3. **Calcular métricas:** totales y promedios del día salen de los datos, no de números fijos
+- [ ] 3b. **Rediseño de las tarjetas de métricas** (perspectivas Yo / Compañeros / Equipo)
+  - [x] HTML: estructura nueva de las 4 tarjetas e icono SVG (v0.2.0)
+  - [x] CSS: paleta por perspectiva, hover / active, puntos de ciclo (v0.2.0)
+  - [ ] JS: etiqueta, puntos, pie con texto y colores, y pista que se atenúa
+  - [ ] Anillo de porcentaje (SVG) en la perspectiva Equipo
+  - [ ] Selector de compañero (solo si hay más de dos)
+  - [ ] Accesibilidad: tarjeta enfocable con teclado
+  - [ ] Móvil: dos columnas
 - [ ] 4. **Agregar pedido manual:** formulario en un modal; el pedido entra al arreglo y todo se recalcula
 - [ ] 5. **Editar y borrar:** botones por fila
 - [ ] 6. **Guardar en `localStorage`:** que al recargar no se pierda nada

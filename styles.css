@@ -40,32 +40,48 @@
    por defecto, porque index.html empieza con data-theme="light").
    El tema oscuro está más abajo y debe ir DESPUÉS de esta regla: ambos
    selectores tienen la misma especificidad y, en un empate, gana el último. */
+
 :root {
-    /* Paleta base: colores "crudos" con nombre, sin función asignada */
+    /* Paleta base: colores "crudos" con nombre, sin función asignada.
+       --color-grey-olive no se usa por ahora */
     --color-platinum: #f2f3f4;
     --color-grey-olive: #848482;
     --color-dark-slate: #111827;
     --color-onyx: #111111;
-    --color-electric-indigo: #4433ff;
+    --color-electric-indigo: #2878c8;
     --color-royal-gold: #fadd6d;
 
     /* Roles: dan un uso a cada color ("fondo principal", "texto", etc.).
        Los componentes usan los roles, no la paleta, y así el tema puede
-       cambiar el color de un rol sin tocar los componentes */
-    --bg-main: var(--color-grey-olive);
+       cambiar el color de un rol sin tocar los componentes.
+
+       Roles de fondo. --bg-nav es la cápsula del menú (Día / Semana / Mes);
+       --bg-control-active es la píldora de la vista actual y
+       --bg-control-hover la píldora bajo el cursor */
+    --bg-main: #e2eaf4;
     --bg-card: #ffffff;
     --bg-header: #ffffff;
-    --bg-table-header: #f8f9fa;
+    --bg-table-header: #eaf0f7;
+    --bg-nav: #c5d5e8;
+    --bg-control-active: #ffffff;
+    --bg-control-hover: #d6e2f0;
 
+    /* Roles de texto. --text-on-accent es el texto sobre fondos de acento
+       (botón "Usuario"). --text-heading no se usa por ahora */
     --text-primary: var(--color-onyx);
-    --text-secondary: var(--color-grey-olive);
-    --border-color: rgba(132, 132, 130, 0.25);
+    --text-secondary: #64748b;
+    --text-heading: #193653;
+    --text-on-accent: #ffffff;
+    --border-color: rgba(25, 54, 83, 0.12);
 
-    /* Botones y acentos */
-    --accent-primary: var(--color-dark-slate);
+    /* Botones y acentos. --accent-navigation y su hover son el botón "Usuario"
+       y el texto de la píldora del menú. --accent-highlight no se usa por ahora */
+    --accent-primary: var(--color-electric-indigo);
     --accent-text: #ffffff;
-    --accent-hover: #1f2937;
+    --accent-hover: #1d5fa3;
     --accent-highlight: var(--color-royal-gold);
+    --accent-navigation: #193653;
+    --accent-navigation-hover: var(--color-electric-indigo);
 
     /* Radios de borde: tarjetas y formas de píldora (valor muy alto = extremos totalmente redondeados) */
     --radius-card: 12px;
@@ -74,6 +90,20 @@
     /* Familias tipográficas. --font-primary se usa solo en body; la mayoría de los componentes definen su propia fuente con --font-heading */
     --font-primary: 'Cambay', sans-serif;
     --font-heading: 'Inter', sans-serif;
+
+    /* Colores de perspectiva: etiqueta, punto activo y borde de las tarjetas de métrica.
+       Cada tarjeta elige uno según su data-perspectiva (ver sección 7) y lo guarda en
+       --persp-color. Los nombres coinciden con los valores del atributo (user, coworkers, team).
+       En claro son tonos oscuros, para contrastar con la tarjeta blanca */
+    --persp-user: #047857;
+    --persp-coworkers: #2563eb;
+    --persp-team: #a16207;
+
+    /* Estados de la tarjeta de métrica, derivados de los roles del tema: por eso no se
+       repiten en el tema oscuro, se recalculan solos.
+       --bg-card-pressed es el fondo al pulsar; --dot-inactive es el gris secundario al 40% de opacidad */
+    --bg-card-pressed: var(--bg-table-header);
+    --dot-inactive: color-mix(in srgb, var(--text-secondary) 40%, transparent);
 }
 
 /* Tema oscuro. El selector [data-theme="dark"] coincide con la etiqueta <html>
@@ -85,14 +115,26 @@
     --bg-card: #1f1f1f;
     --bg-header: #1f1f1f;
     --bg-table-header: #2a2a2a;
+    --bg-nav: #2a2a2a;
+    --bg-control-active: #3a3a3a;
+    --bg-control-hover: #444444;
 
     --text-primary: var(--color-platinum);
     --text-secondary: #a3a3a3;
     --border-color: rgba(242, 243, 244, 0.12);
+    --text-heading: var(--color-platinum);
 
     --accent-primary: var(--color-royal-gold);
     --accent-text: var(--color-onyx);
     --accent-hover: #e0c345;
+    --accent-navigation: var(--color-royal-gold);
+    --accent-navigation-hover: #e0c345;
+    --text-on-accent: var(--color-onyx);
+
+    /* Perspectivas en oscuro: tonos claros, para contrastar con la tarjeta oscura */
+    --persp-user: #34d399;
+    --persp-coworkers: #60a5fa;
+    --persp-team: #fadd6d;
 }
 
 /* ============================================================
@@ -114,7 +156,7 @@ body {
    (<h2 id="logotipo">), que van dentro de #brand. Los márgenes por defecto de
    los encabezados ya los quitó el reset de la sección 1. */
 #brand h1,
-#brand h2{
+#brand h2 {
 
     line-height: 1;
 }
@@ -181,7 +223,7 @@ header {
 /* Bloque central: cápsula de navegación (<nav id="nav">) */
 
 #nav {
-    background-color: var(--bg-main);
+    background-color: var(--bg-nav);
     border-radius: var(--radius-pill);
 
     display: flex;
@@ -214,17 +256,18 @@ header {
 }
 
 /* :hover (cursor encima) y a.active (vista actual, clase que gestiona script.js)
-   comparten la misma apariencia de "píldora encendida". Usan colores fijos
-   de la paleta (no variables de rol), por lo que se ven igual en ambos temas.
-   .active además pone el texto en negrita. */
+   tienen una apariencia parecida de "píldora encendida". Usan colores de rol
+   (--bg-control-hover, --bg-control-active y --accent-navigation), por lo que
+   cambian con el tema. .active además pone el texto en negrita. */
+
 #nav a:hover {
-    background-color: var(--color-platinum);
-    color: var(--color-onyx);
+    background-color: var(--bg-control-hover);
+    color: var(--accent-navigation);
 }
 
 #nav a.active {
-    background-color: var(--color-platinum);
-    color: var(--color-onyx);
+    background-color: var(--bg-control-active);
+    color: var(--accent-navigation);
     font-weight: 600;
 }
 
@@ -269,8 +312,8 @@ header {
 #logout-button {
     height: 34px;
     text-transform: uppercase;
-    background-color: var(--bg-main);
-    color: var(--text-primary);
+    background-color: var(--accent-navigation);
+    color: var(--text-on-accent);
     border: none;
     border-radius: var(--radius-pill);
     padding: 0 0.9rem;
@@ -285,8 +328,8 @@ header {
 }
 
 #logout-button:hover {
-    background-color: var(--color-dark-slate);
-    color: var(--color-platinum);
+    background-color: var(--accent-navigation-hover);
+    color: var(--text-on-accent);
 }
 
 /* ============================================================
@@ -498,10 +541,13 @@ tbody tr:hover {
 }
 
 /* Tarjeta de métrica (Pedidos, Ingresos, Promedio Día, Promedio Semana).
-   Aspecto similar a .card pero más compacta y con el contenido centrado.
-   cursor: pointer cambia el cursor a una mano al pasar sobre la tarjeta para
-   indicar que es interactiva. Por sí sola esta regla NO implementa ningún clic:
-   el comportamiento (cambiar de perspectiva) lo programa script.js. */
+   Aspecto similar a .card pero más compacta: apila sus partes en columna y las centra.
+   cursor: pointer indica que es interactiva, pero por sí sola esta regla NO implementa
+   el clic: el comportamiento (cambiar de perspectiva) lo programa script.js.
+   position: relative la convierte en el marco de referencia del dedito (.icono-dedito
+   usa position: absolute). El borde de 1px es transparente a propósito: así el hover
+   solo cambia su color y la tarjeta no se mueve. La transición va aquí, en el estado
+   base, para que anime tanto al entrar como al salir de :hover y :active */
 .metric-card {
     background-color: var(--bg-card);
     border-radius: var(--radius-card);
@@ -510,13 +556,135 @@ tbody tr:hover {
 
     display: flex;
     flex-direction: column;
-    gap: 0.5rem;
+    gap: 0.8rem;
     align-items: center;
     cursor: pointer;
+    position: relative;
+    border: 1px solid transparent;
+    transition: transform 175ms, border-color 175ms, background-color 175ms;
+}
+
+/* Una regla por perspectiva. script.js cambia data-perspectiva en cada clic y la regla
+   que coincide define --persp-color en la tarjeta; sus hijos la heredan y la usan
+   (etiqueta, punto activo, borde). Para el tema oscuro no hace falta tocar estas
+   reglas: --persp-user, --persp-coworkers y --persp-team ya tienen su valor oscuro */
+.metric-card[data-perspectiva="user"] {
+    --persp-color: var(--persp-user);
+}
+
+.metric-card[data-perspectiva="coworkers"] {
+    --persp-color: var(--persp-coworkers);
+}
+
+.metric-card[data-perspectiva="team"] {
+    --persp-color: var(--persp-team);
+}
+
+/* Estados de la tarjeta. :hover va dentro de (hover: hover) para que solo valga
+   con ratón: en pantallas táctiles se quedaría "pegado" después de tocar.
+   translateY(-1px) sube la tarjeta sin mover a sus vecinas */
+@media (hover: hover) {
+    .metric-card:hover {
+        border-color: var(--persp-color);
+        transform: translateY(-1px);
+    }
+}
+
+/* :active va después de :hover porque pesan igual y, en un empate, gana la última:
+   al pulsar con el cursor encima debe verse el efecto de pulsado */
+.metric-card:active {
+    transform: scale(0.98);
+    background-color: var(--bg-card-pressed);
+    border-color: var(--persp-color);
+}
+
+/* Anillo para navegación con teclado. Hoy no se ve porque la tarjeta es un div y el
+   teclado no puede enfocarla; quedará lista cuando se haga enfocable */
+.metric-card:focus-visible {
+    outline: 2px solid var(--persp-color);
+    outline-offset: 2px;
+}
+
+/* Ícono del dedito (símbolo del sprite que está al inicio del body en index.html).
+   fill: none y stroke: currentColor lo dibujan como línea con el color del texto
+   (aquí --text-secondary). position: absolute lo ubica arriba a la derecha de la tarjeta */
+.icono-dedito {
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.75;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    color: var(--text-secondary);
+    position: absolute;
+    top: 8px;
+    right: 10px;
+}
+
+/* Fila de título y etiqueta de perspectiva: flex en fila, centrada y alineada
+   por la línea base del texto. El font-size de aquí lo hereda la etiqueta (.metric-state) */
+.card-title-tag {
+    display: flex;
+    flex-direction: row;
+    align-items: baseline;
+    font-size: 0.9rem;
+    gap: 0.4rem;
+    justify-content: center;
+}
+
+/* Grupo de datos: título, valor y pie apilados y centrados */
+.card-data {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+    text-align: center;
+    margin-top: 0.2rem;
+}
+
+/* Contenedor de los puntos de ciclo: en fila y centrados */
+.card-dots {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    gap: 0.2rem;
+}
+
+/* Punto inactivo: círculo pequeño. La transición va en la regla base para que
+   anime el ancho y el color tanto al activarse como al desactivarse */
+.card-dot {
+    background-color: var(--dot-inactive);
+    width: 0.4rem;
+    height: 0.4rem;
+    border-radius: var(--radius-pill);
+    transition: width 175ms, background-color 175ms;
+}
+
+/* Punto activo (perspectiva actual): se estira a píldora y toma el color de la
+   perspectiva. Dos clases pegadas pesan más que .card-dot, así que gana sin importar el orden */
+.card-dot.active {
+    width: 1.8rem;
+    background-color: var(--persp-color);
+}
+
+/* Pista "Pulsa para cambiar": texto pequeño, gris y pegado a la derecha */
+.card-hint {
+    font-size: 0.57rem;
+    color: var(--text-secondary);
+    text-align: right;
+}
+
+/* Grupo de control: puntos y pista apilados. La tarjeta centra a sus hijos
+   (align-items: center), lo que los encoge a su contenido; align-self: stretch
+   hace que este grupo ocupe todo el ancho para que la pista pueda llegar a la derecha */
+.card-control {
+    align-self: stretch;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
 }
 
 /* Partes de una tarjeta de métrica: título pequeño y gris, valor grande y
-   texto secundario. También las usan los resúmenes de .card-content-box. */
+   texto secundario. También las usan los resúmenes de .card-content-box
+   ("Mis pedidos" y "Compañeros"), así que un cambio de tamaño aquí también les afecta. */
 .metric-title {
     font-family: var(--font-heading);
     font-size: 0.9rem;
@@ -525,14 +693,22 @@ tbody tr:hover {
 
 .metric-value {
     font-family: var(--font-heading);
-    font-size: 2rem;
+    font-size: 1.7rem;
     color: var(--text-primary);
     font-weight: 600;
 }
 
+/* Etiqueta de perspectiva ("· Yo"): toma el color de --persp-color, que la tarjeta
+   define según su data-perspectiva */
+.metric-state {
+    color: var(--persp-color);
+    font-weight: 600;
+    font-family: var(--font-heading);
+}
+
 .metric-change {
     font-family: var(--font-heading);
-    font-size: 0.8rem;
+    font-size: 0.7rem;
     font-weight: 500;
 }
 
