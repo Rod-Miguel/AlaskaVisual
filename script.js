@@ -302,6 +302,10 @@ if (mineOrders === 0) {
 const perspectivas = ["user", "coworkers", "team"];
 // Las 4 tarjetas de la vista Día (clase "metric-card" en index.html).
 const metricCards = document.querySelectorAll(".metric-card");
+const etiquetas = {
+    user: "· Yo", coworkers: "· Compañeros", team: "· Equipo"
+};
+
 
 metricCards.forEach(function (card) {
     // Un listener por tarjeta. "change" recibe el evento del clic; el código
@@ -322,11 +326,24 @@ metricCards.forEach(function (card) {
         let incomeToShow = 0;
         let averageToShow = 0;
 
+        const etiqueta = card.querySelector(".metric-state");
+        etiqueta.textContent = etiquetas[siguientePerspectiva];
+
+        const dots = card.querySelectorAll(".card-dot");
+
+        dots.forEach(function (dot) {
+            dot.classList.remove("active");
+        });
+
+        dots[siguientePosicion].classList.add("active");
+
+
         // Se identifica qué tarjeta fue pulsada por su id y se elige el valor
         // ya calculado en el bloque 5 que corresponde a su nueva perspectiva.
         if (card.id === "card-order") {
             if (card.dataset.perspectiva === "user") {
                 ordersToShow = mineOrders
+
             } else if (card.dataset.perspectiva === "coworkers") {
                 ordersToShow = themOrders
             } else if (card.dataset.perspectiva === "team") {

@@ -39,7 +39,9 @@ Primero todo funciona en el navegador guardando en `localStorage`. Después se m
 - [ ] 3b. **Rediseño de las tarjetas de métricas** (perspectivas Yo / Compañeros / Equipo)
   - [x] HTML: estructura nueva de las 4 tarjetas e icono SVG (v0.2.0)
   - [x] CSS: paleta por perspectiva, hover / active, puntos de ciclo (v0.2.0)
-  - [ ] JS: etiqueta, puntos, pie con texto y colores, y pista que se atenúa
+  - [X] JS: etiqueta y puntos.
+  - [ ] Pie con texto y colores.
+  - [ ] Pista que se atenúa
   - [ ] Anillo de porcentaje (SVG) en la perspectiva Equipo
   - [ ] Selector de compañero (solo si hay más de dos)
   - [ ] Accesibilidad: tarjeta enfocable con teclado

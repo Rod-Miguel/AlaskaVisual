@@ -629,6 +629,12 @@ tbody tr:hover {
     font-size: 0.9rem;
     gap: 0.4rem;
     justify-content: center;
+    /* Si por alguna razón el texto supera el ancho de la tarjeta, 
+    el contenido saltará a una línea nueva. 
+    Hay dos flex-wrap, uno para los navegadores nuevos y otro para los navegadores antiguos
+    o que no lean este parámetro. No borrar. */
+    flex-wrap: wrap;
+    flex-wrap: balance;
 }
 
 /* Grupo de datos: título, valor y pie apilados y centrados */
