@@ -10,12 +10,14 @@
  *   2. Cambio de tema claro / oscuro.
  *   3. Datos de ejemplo del día (arreglo "pedidos").
  *   4. Dibujo de la tabla del día.
- *   5. Cálculo de métricas y escritura de sus valores en las tarjetas.
- *   6. Ciclo de perspectivas de las tarjetas (se activa al hacer clic).
+ *   5. Cálculo de métricas y escritura de los resúmenes de "Desempeño del turno".
+ *   6. Perspectivas de las tarjetas: define pintarTarjeta, que pinta cada
+ *      tarjeta al cargar y en cada clic.
  *
- * Los bloques 1, 2 y 6 solo "programan" eventos: su código interno corre
+ * Los bloques 1 y 2 solo "programan" eventos: su código interno corre
  * después, cuando el usuario hace clic. Los bloques 3, 4 y 5 corren de
- * inmediato al cargar la página.
+ * inmediato al cargar la página. El bloque 6 hace las dos cosas: programa el
+ * clic de las tarjetas y las pinta una vez al cargar.
  */
 
 /* ============================================================
@@ -101,15 +103,26 @@ const USUARIO_ACTUAL = "Miguel";
 // Solo se almacena lo que no se puede calcular: el total de cada carrera
 // se calcula cuando hace falta (aporteCliente + PAGO_RESTAURANTE).
 const pedidos = [
-    { hora: "11:30", aporteCliente: 3, repartidor: "Miguel" },
-    { hora: "12:45", aporteCliente: 5, repartidor: "Oliver" },
-    { hora: "14:10", aporteCliente: 2, repartidor: "Miguel" },
-    { hora: "15:25", aporteCliente: 4, repartidor: "Oliver" },
-    { hora: "18:00", aporteCliente: 6, repartidor: "Miguel" },
-    { hora: "19:50", aporteCliente: 3, repartidor: "Oliver" },
-    { hora: "21:15", aporteCliente: 4, repartidor: "Miguel" },
-    { hora: "14:40", aporteCliente: 2, repartidor: "Oliver" },
-    { hora: "19:05", aporteCliente: 4, repartidor: "Miguel" },
+  { hora: "08:15", aporteCliente: 3, repartidor: "Miguel" },
+  { hora: "09:00", aporteCliente: 5, repartidor: "Oliver" },
+  { hora: "09:45", aporteCliente: 2, repartidor: "Miguel" },
+  { hora: "10:30", aporteCliente: 4, repartidor: "Miguel" },
+  { hora: "11:10", aporteCliente: 6, repartidor: "Oliver" },
+  { hora: "12:00", aporteCliente: 3, repartidor: "Miguel" },
+  { hora: "12:50", aporteCliente: 5, repartidor: "Oliver" },
+  { hora: "13:30", aporteCliente: 2, repartidor: "Miguel" },
+  { hora: "14:15", aporteCliente: 4, repartidor: "Miguel" },
+  { hora: "15:00", aporteCliente: 3, repartidor: "Oliver" },
+  { hora: "16:20", aporteCliente: 5, repartidor: "Miguel" },
+  { hora: "17:10", aporteCliente: 2, repartidor: "Oliver" },
+  { hora: "18:25", aporteCliente: 6, repartidor: "Miguel" },
+  { hora: "19:15", aporteCliente: 3, repartidor: "Miguel" },
+  { hora: "20:00", aporteCliente: 4, repartidor: "Oliver" },
+  { hora: "20:45", aporteCliente: 5, repartidor: "Miguel" },
+  { hora: "21:30", aporteCliente: 2, repartidor: "Oliver" },
+  { hora: "22:10", aporteCliente: 4, repartidor: "Miguel" },
+  { hora: "22:50", aporteCliente: 3, repartidor: "Miguel" },
+  { hora: "23:20", aporteCliente: 5, repartidor: "Oliver" }
 ];
 
 /* ============================================================
@@ -143,8 +156,8 @@ pedidos.forEach(function (pedido, posicion) {
     // Una celda <td> por cada <th> de la tabla, en el mismo orden:
     // #, Hora, Aporte Cliente, Aporte Restaurante, Total Carrera, Repartidor.
     // ${...} inserta el valor de una expresión dentro del texto.
-    // toFixed(2) deja 2 decimales pero devuelve texto, por eso solo se usa
-    // para mostrar, nunca para calcular.
+    // toFixed(2) deja 2 decimales pero devuelve texto, por eso aquí solo se
+    // usa para mostrar, no para calcular.
     // "cell-key-figure" resalta en negrita la cifra clave (el total).
     fila.innerHTML = `
     <td>${posicion + 1}</td>
@@ -169,8 +182,9 @@ pedidos.forEach(function (pedido, posicion) {
  * tarjetas (bloque 6) no recalculan: solo leen estas variables.
  */
 
-// Elementos del HTML donde se escriben las tres métricas de las tarjetas
-// superiores (<p class="metric-value"> dentro de cada .metric-card).
+// Elementos de las tarjetas Pedidos e Ingresos (<p class="metric-value">).
+// Este bloque solo los guarda: quien escribe en ellos es pintarTarjeta
+// (bloque 6). El de la tarjeta Promedio se declara más abajo.
 const deliveriesAmount = document.getElementById("metric-orders");
 
 const totalIncome = document.getElementById("metric-income");
@@ -207,11 +221,6 @@ pedidos.forEach(function (pedido) {
     }
 });
 
-// Valor inicial de la tarjeta "Pedidos": se muestra la perspectiva "user"
-// porque así empieza data-perspectiva en el HTML. Va después del conteo
-// porque necesita que mineOrders ya tenga su valor final.
-deliveriesAmount.textContent = mineOrders;
-
 currentUserCard.textContent = mineOrders;
 otherUserCard.textContent = themOrders;
 
@@ -236,10 +245,6 @@ pedidos.forEach(function (pedido) {
     }
 });
 
-// Valor inicial de la tarjeta "Ingresos" (perspectiva "user"). El formato
-// (2 decimales y "$") se aplica solo al final, cuando la suma ya terminó.
-totalIncome.textContent = mineIncome.toFixed(2) + "$";
-
 currentUserCardIncome.textContent = mineIncome.toFixed(2) + "$ acumulados";
 otherUserCardIncome.textContent = themIncome.toFixed(2) + "$ acumulados";
 
@@ -247,17 +252,22 @@ otherUserCardIncome.textContent = themIncome.toFixed(2) + "$ acumulados";
 // Promedio = ingreso total / cantidad de pedidos, calculado por perspectiva.
 const deliveriesAverage = document.getElementById("metric-average");
 
-// Los totales del equipo ya se conocen: la cantidad es el largo del arreglo
-// y el ingreso es el acumulador finalIncome.
-const teamOrders = pedidos.length
-const teamIncome = finalIncome
+// Los totales del equipo ya se conocen. teamOrders es el largo del arreglo.
+// teamIncome guarda en un const el valor FINAL de finalIncome: finalIncome es
+// un let porque cambia mientras el bucle suma, pero al terminar el bucle ya no
+// cambia. El const evita reasignar teamIncome por error y le da un nombre
+// paralelo a mineIncome y themIncome.
+const teamOrders = pedidos.length;
+const teamIncome = finalIncome;
 let mineAverage;
 let themAverage;
 let teamAverage;
 
 // Caso sin pedidos: dividir entre 0 daría Infinity o NaN, así que cada
 // perspectiva revisa primero si tiene pedidos y, si no, deja el promedio en 0.
-// (El texto "Sin pedidos" que ve el usuario se decide más abajo, al mostrarlo.)
+// Ese 0 no llega a mostrarse: el texto "Sin pedidos" que ve el usuario lo
+// decide pintarTarjeta (bloque 6), que vuelve a revisar los pedidos.
+// Posible limpieza para otra sesión: la comprobación está duplicada.
 if (mineOrders === 0) {
     mineAverage = 0;
 } else {
@@ -276,15 +286,6 @@ if (teamOrders === 0) {
     teamAverage = teamIncome / teamOrders;
 }
 
-// Valor inicial de la tarjeta "Promedio Dia" (perspectiva "user"). Usa el mismo
-// criterio que el manejador de clic: si el usuario no tiene pedidos se muestra
-// "Sin pedidos"; si los tiene, su promedio.
-if (mineOrders === 0) {
-    deliveriesAverage.textContent = "Sin pedidos";
-} else {
-    deliveriesAverage.textContent = mineAverage.toFixed(2) + "$";
-}
-
 /* ============================================================
  * 6. PERSPECTIVAS INDEPENDIENTES DE LAS TARJETAS
  * ============================================================
@@ -295,99 +296,176 @@ if (mineOrders === 0) {
  * guarda en su propio atributo data-perspectiva (en el HTML, cada tarjeta
  * empieza en "user"). No existe una variable global compartida, así que
  * cambiar una tarjeta no afecta a las otras.
+ *
+ * Reparto de trabajo: el manejador de clic (al final del archivo) solo avanza
+ * la perspectiva, la etiqueta y los puntos; pintarTarjeta escribe el valor,
+ * el pie y el anillo según esa perspectiva.
  */
 
-// Orden del ciclo. Los textos deben coincidir con los valores que usa
-// data-perspectiva y con las comparaciones del manejador de clic.
+// Orden del ciclo. Los textos deben coincidir con los valores de
+// data-perspectiva, con las claves de "etiquetas" y con las comparaciones de
+// pintarTarjeta.
 const perspectivas = ["user", "coworkers", "team"];
 // Las 4 tarjetas de la vista Día (clase "metric-card" en index.html).
 const metricCards = document.querySelectorAll(".metric-card");
+// Texto de la etiqueta de cada perspectiva. Sus claves son las mismas de
+// data-perspectiva; el manejador de clic lo escribe en .metric-state.
 const etiquetas = {
     user: "· Yo", coworkers: "· Compañeros", team: "· Equipo"
 };
 
+// Pinta el contenido de UNA tarjeta según su data-perspectiva actual: elige
+// qué valor mostrar (de los ya calculados en el bloque 5) y lo escribe.
+// Se llama una vez por tarjeta al cargar y de nuevo en cada clic (ver el final
+// del archivo). Usa variables del bloque 5 (mineOrders, themIncome,
+// teamAverage...), por eso la llamada inicial tiene que ir después de ese
+// bloque: con let y const, usar una variable antes de su línea da error.
+function pintarTarjeta(card) {
+    // Valores a mostrar, iniciados en 0; cada rama de abajo reemplaza el que
+    // le corresponde según la perspectiva de la tarjeta.
+    let ordersToShow = 0;
+    let incomeToShow = 0;
+    let averageToShow = 0;
 
+    // Pedidos es la única tarjeta con pie calculado y anillo.
+    if (card.id === "card-order") {
+        const theRings = card.querySelector(".ring");
+        const footer = card.querySelector(".metric-change");
+        const ringValue = theRings.querySelector(".ring-value");
+
+        // Porcentaje de los pedidos del equipo que son míos (0 si no hay pedidos,
+        // para no dividir entre 0). El anillo lo recibe en stroke-dasharray como
+        // "pintado vacío": como el contorno mide 100 (pathLength="100" en el
+        // HTML), el pintado es el porcentaje y el vacío es lo que falta hasta 100.
+        // toFixed(0) redondea y devuelve TEXTO: 100 - "60" da 40 porque la resta
+        // convierte el texto en número, pero "60" + " " + 40 concatena y da "60 40".
+        const percentage = teamOrders === 0 ? 0 : (mineOrders / teamOrders) * 100;
+        const emptyDasharray = 100 - percentage.toFixed(0);
+        ringValue.setAttribute("stroke-dasharray", percentage.toFixed(0) + " " + emptyDasharray);
+
+        // Texto del pie y su estado (color), que dependen de la perspectiva.
+        let text;
+        let status;
+
+        if (card.dataset.perspectiva === "user") {
+            ordersToShow = mineOrders;
+            // Texto provisional: la comparación con ayer está pendiente.
+            text = "Sin datos de ayer";
+            status = "status-neutral";
+        } else if (card.dataset.perspectiva === "coworkers") {
+            ordersToShow = themOrders;
+            // Diferencia a mi favor (positiva) o en contra (negativa).
+            const difference = mineOrders - themOrders;
+
+            if (difference > 0) {
+                text = `Tú +${difference}`;
+                status = "status-success";
+            } else if (difference < 0) {
+                text = `Tú −${Math.abs(difference)}`;
+                status = "status-danger";
+            } else {
+                text = "Parejos";
+                status = "status-neutral";
+            }
+        } else if (card.dataset.perspectiva === "team") {
+            ordersToShow = teamOrders;
+
+            if (teamOrders === 0) {
+                text = "Sin pedidos";
+                status = "status-neutral";
+            } else if (mineOrders > themOrders) {
+                text = `Tú ${percentage.toFixed(0)}%`;
+                status = "status-success";
+            } else if (mineOrders < themOrders) {
+                text = `Tú ${percentage.toFixed(0)}%`;
+                status = "status-danger";
+            } else {
+                text = `Tú ${percentage.toFixed(0)}%`;
+                status = "status-neutral";
+            }
+        }
+
+        // Se quitan los tres estados antes de poner el nuevo; si no, los colores
+        // de clics anteriores se acumularían. El anillo usa el mismo estado que
+        // el pie para tener su mismo color.
+        footer.textContent = text;
+        footer.classList.remove("status-success", "status-neutral", "status-danger");
+        footer.classList.add(status);
+
+        ringValue.classList.remove("status-success", "status-neutral", "status-danger");
+        ringValue.classList.add(status);
+
+        // El anillo solo se muestra en la perspectiva "Equipo" (en styles.css,
+        // .ring sin "active" es display: none).
+        if (card.dataset.perspectiva === "team") {
+            theRings.classList.add("active");
+        } else {
+            theRings.classList.remove("active");
+        }
+
+        deliveriesAmount.textContent = ordersToShow;
+
+    } else if (card.id === "card-income") {
+        // El valor ya se guarda formateado (texto con 2 decimales y "$").
+        if (card.dataset.perspectiva === "user") {
+            incomeToShow = mineIncome.toFixed(2) + "$";
+        } else if (card.dataset.perspectiva === "coworkers") {
+            incomeToShow = themIncome.toFixed(2) + "$";
+        } else if (card.dataset.perspectiva === "team") {
+            incomeToShow = teamIncome.toFixed(2) + "$";
+        }
+        totalIncome.textContent = incomeToShow;
+
+    } else if (card.id === "card-average") {
+        // Operador ternario (condición ? A : B): si el grupo no tiene pedidos
+        // muestra "Sin pedidos" y, si los tiene, el promedio formateado. Así se
+        // evita mostrar un 0.00$ engañoso.
+        if (card.dataset.perspectiva === "user") {
+            averageToShow = mineOrders === 0 ? "Sin pedidos" : mineAverage.toFixed(2) + "$";
+        } else if (card.dataset.perspectiva === "coworkers") {
+            averageToShow = themOrders === 0 ? "Sin pedidos" : themAverage.toFixed(2) + "$";
+        } else if (card.dataset.perspectiva === "team") {
+            averageToShow = teamOrders === 0 ? "Sin pedidos" : teamAverage.toFixed(2) + "$";
+        }
+        deliveriesAverage.textContent = averageToShow;
+    }
+    // "card-average-week" no tiene rama a propósito: pedidos solo guarda un día,
+    // así que todavía no hay datos de semana que mostrar. Esta tarjeta recibe el
+    // listener de clic como las otras (por tener la clase "metric-card"), por
+    // eso al pulsarla sí cambian su perspectiva, su etiqueta y sus puntos,
+    // pero su valor ("P/D") no cambia. Pendiente hasta tener datos semanales.
+}
+
+// Se recorre cada tarjeta para programar su clic (las 4 reciben el mismo
+// código, incluida la de Promedio Semana) y para pintarla una vez al cargar.
 metricCards.forEach(function (card) {
-    // Un listener por tarjeta. "change" recibe el evento del clic; el código
-    // actual no lo usa.
-    card.addEventListener("click", function (change) {
-        // card.dataset.perspectiva lee el atributo data-perspectiva del HTML.
+    card.addEventListener("click", function () {
+        // card.dataset.perspectiva lee el atributo data-perspectiva de la tarjeta.
         // indexOf devuelve su posición en el ciclo (0, 1 o 2; -1 si no existe).
         const posicionActual = perspectivas.indexOf(card.dataset.perspectiva);
-        // El operador % (resto) hace que después de la última posición se
-        // vuelva a la primera: (2 + 1) % 3 = 0.
+        // El operador % (resto) vuelve al inicio después de la última posición:
+        // (2 + 1) % 3 = 0.
         const siguientePosicion = (posicionActual + 1) % perspectivas.length;
         const siguientePerspectiva = perspectivas[siguientePosicion];
         // Se guarda la nueva perspectiva en la tarjeta: ese es su "estado".
         card.dataset.perspectiva = siguientePerspectiva;
-        // Valores a mostrar, iniciados en 0; se reemplazan según la
-        // perspectiva y la tarjeta pulsada.
-        let ordersToShow = 0;
-        let incomeToShow = 0;
-        let averageToShow = 0;
 
         const etiqueta = card.querySelector(".metric-state");
         etiqueta.textContent = etiquetas[siguientePerspectiva];
 
+        // Los puntos de ciclo están escritos en el HTML (uno por perspectiva, en
+        // el mismo orden que "perspectivas"), por eso dots[siguientePosicion]
+        // es el punto de la nueva perspectiva.
         const dots = card.querySelectorAll(".card-dot");
-
         dots.forEach(function (dot) {
             dot.classList.remove("active");
         });
-
         dots[siguientePosicion].classList.add("active");
 
+        pintarTarjeta(card);
+    });
 
-        // Se identifica qué tarjeta fue pulsada por su id y se elige el valor
-        // ya calculado en el bloque 5 que corresponde a su nueva perspectiva.
-        if (card.id === "card-order") {
-            if (card.dataset.perspectiva === "user") {
-                ordersToShow = mineOrders
-
-            } else if (card.dataset.perspectiva === "coworkers") {
-                ordersToShow = themOrders
-            } else if (card.dataset.perspectiva === "team") {
-                ordersToShow = teamOrders
-            }
-            deliveriesAmount.textContent = ordersToShow;
-        } else if (card.id === "card-income") {
-            // Aquí el valor ya se guarda formateado (texto con 2 decimales y "$").
-            if (card.dataset.perspectiva === "user") {
-                incomeToShow = mineIncome.toFixed(2) + "$"
-            } else if (card.dataset.perspectiva === "coworkers") {
-                incomeToShow = themIncome.toFixed(2) + "$"
-            } else if (card.dataset.perspectiva === "team") {
-                incomeToShow = teamIncome.toFixed(2) + "$"
-            }
-            totalIncome.textContent = incomeToShow
-        }
-        else if (card.id === "card-average") {
-            // Caso sin pedidos: el operador ternario (condición ? A : B)
-            // muestra "Sin pedidos" si el grupo tiene 0 pedidos y, si no,
-            // el promedio formateado. Así se evita mostrar un 0.00$ engañoso.
-            if (card.dataset.perspectiva === "user") {
-                averageToShow = mineOrders === 0
-                    ? "Sin pedidos"
-                    : mineAverage.toFixed(2) + "$";
-
-            } else if (card.dataset.perspectiva === "coworkers") {
-                averageToShow = themOrders === 0
-                    ? "Sin pedidos"
-                    : themAverage.toFixed(2) + "$";
-
-            } else if (card.dataset.perspectiva === "team") {
-                averageToShow = teamOrders === 0
-                    ? "Sin pedidos"
-                    : teamAverage.toFixed(2) + "$";
-            }
-            deliveriesAverage.textContent = averageToShow;
-        }
-        // La tarjeta "card-average-week" también recibe este listener, pero
-        // no tiene una rama arriba: al pulsarla solo cambia su
-        // data-perspectiva y se registra en la consola; su contenido no cambia.
-
-        // Registro de depuración: id de la tarjeta, perspectiva nueva y las
-        // posiciones del ciclo antes y después del clic.
-        console.log(card.id, card.dataset.perspectiva, posicionActual, siguientePosicion);;
-    })
+    // Pintado inicial: sin esto las tarjetas mostrarían el relleno del HTML
+    // ("12$", "5.13$"...) hasta el primer clic.
+    pintarTarjeta(card);
 });

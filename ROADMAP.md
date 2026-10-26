@@ -39,10 +39,17 @@ Primero todo funciona en el navegador guardando en `localStorage`. Después se m
 - [ ] 3b. **Rediseño de las tarjetas de métricas** (perspectivas Yo / Compañeros / Equipo)
   - [x] HTML: estructura nueva de las 4 tarjetas e icono SVG (v0.2.0)
   - [x] CSS: paleta por perspectiva, hover / active, puntos de ciclo (v0.2.0)
-  - [X] JS: etiqueta y puntos.
-  - [ ] Pie con texto y colores.
-  - [ ] Pista que se atenúa
+  - [x] JS: etiqueta y puntos
+  - [x] JS: función pintarTarjeta, que pinta al cargar y en cada clic
+  - [ ] Pie con texto y colores
+    - [x] Pedidos (Yo / Compañeros / Equipo)
+    - [ ] Ingresos
+    - [ ] Promedio Día
+    - [ ] Promedio Semana
   - [ ] Anillo de porcentaje (SVG) en la perspectiva Equipo
+    - [x] Pedidos
+    - [ ] Ingresos
+  - [ ] Pista que se atenúa
   - [ ] Selector de compañero (solo si hay más de dos)
   - [ ] Accesibilidad: tarjeta enfocable con teclado
   - [ ] Móvil: dos columnas

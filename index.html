@@ -68,6 +68,7 @@
     </svg>
 
 
+
     <!-- ENCABEZADO: marca (izquierda), menú de navegación (centro) y usuario (derecha) -->
     <header>
         <!-- Marca: #logo es el cuadro con la letra y #logotipo es el nombre de la app (solo presentación) -->
@@ -89,7 +90,7 @@
         <div id="login">
             <!-- Avatar: script.js lo usa como botón para alternar el tema claro / oscuro (cambia data-theme en <html>) -->
             <button id="avatar-display" title="Cambiar tema">MR</button>
-            <!-- Botón de usuario: script.js no lo referencia, por ahora no hace nada (id reservado para login / cerrar sesión según el plan del proyecto) -->
+            <!-- Botón de usuario: script.js no lo usa (no hace nada al pulsarlo). Pendiente: login / cerrar sesión -->
             <button id="logout-button">Usuario</button>
         </div>
     </header>
@@ -104,9 +105,12 @@
             <!-- Cuadrícula de 4 tarjetas de métricas (4 columnas en escritorio, 2 en tablet, 1 en celular).
                  Cada .metric-card tiene un listener de clic en script.js y un atributo data-perspectiva
                  que guarda su perspectiva actual ("user" = mis datos, "coworkers" = compañeros, "team" = equipo).
-                 Como cada tarjeta guarda su propia perspectiva, funcionan de forma independiente -->
+                 Como cada tarjeta guarda su propia perspectiva, funcionan de forma independiente.
+                 Al cargar y en cada clic, la función pintarTarjeta de script.js escribe el valor de la tarjeta
+                 según su perspectiva: lo que hay escrito aquí es solo relleno inicial -->
             <div class="metric-grid">
                 <!-- Tarjeta Pedidos: script.js la identifica por id="card-order" y escribe la cantidad en #metric-orders.
+                     Es la única con pie calculado y anillo (ver el pie más abajo).
                      Las 4 tarjetas tienen la misma estructura:
                        1. Ícono del dedito (posición absoluta, arriba a la derecha)
                        2. .card-data: grupo de datos (título con etiqueta, valor y pie)
@@ -123,25 +127,43 @@
                     <!-- GRUPO DE DATOS -->
                     <div class="card-data">
                         <!-- Fila de título y etiqueta de perspectiva (se alinean en una línea con flex en styles.css).
-                             El texto "· Yo" es fijo por ahora: script.js todavía no lo cambia al hacer clic.
-                             Solo su color cambia, porque styles.css lo toma de data-perspectiva -->
+                             El texto "· Yo" es el inicial: en cada clic script.js lo reemplaza por
+                             "· Compañeros" o "· Equipo" (diccionario "etiquetas"). Su color lo toma
+                             styles.css de data-perspectiva -->
                         <div class="card-title-tag">
                             <h3 class="metric-title">Pedidos</h3>
                             <p id="metric-order-tag" class="metric-state">· Yo</p>
                         </div>
                         <!-- Vacío a propósito: script.js escribe aquí el número de pedidos al cargar y al hacer clic -->
                         <p id="metric-orders" class="metric-value"></p>
-                        <!-- Pie: texto fijo escrito a mano. No se calcula con datos ni cambia con la perspectiva (comparación con ayer pendiente) -->
-                        <span class="metric-change status-success">+2 desde ayer</span>
+                        <!-- Pie de Pedidos: pintarTarjeta escribe el texto de .metric-change y su color (status-success / -danger / -neutral)
+                             según la perspectiva. En "Yo" el texto "Sin datos de ayer" es provisional: la comparación
+                             con ayer está pendiente.
+                             Anillo (SVG): muestra qué parte del total del equipo son mis pedidos y solo se ve en la
+                             perspectiva "Equipo" (la clase "active" del <svg> la agrega script.js).
+                             pathLength="100" hace que el contorno del círculo mida 100, así que en
+                             stroke-dasharray="10 90" el primer número es el tramo pintado (en %) y el segundo el
+                             vacío. "10 90" es solo el valor inicial: pintarTarjeta lo reemplaza con tu porcentaje.
+                             rotate(-90) mueve el inicio del trazo de las 3 en punto a las 12 -->
+                        <div class="metric-footer">
+                            <svg class="ring" viewBox="0 0 100 100" aria-hidden="true">
+                                <circle class="ring-track" cx="50" cy="50" r="40" fill="none" stroke-width="20" />
+                                <circle class="ring-value" cx="50" cy="50" r="40" fill="none" stroke-width="20"
+                                    pathLength="100" stroke-dasharray="10 90" transform="rotate(-90 50 50)" />
+                            </svg>
+                            <span class="metric-change status-success"></span>
+                        </div>
+
                     </div>
 
                     <!-- GRUPO DE CONTROL -->
                     <div class="card-control">
-                        <!-- Puntos de ciclo: uno por perspectiva (Yo, Compañeros, Equipo). Por ahora están escritos a mano
-                             para poder darles estilo; script.js todavía no los crea ni mueve la clase "active",
-                             que marca el punto de la perspectiva actual -->
+                        <!-- Puntos de ciclo: uno por perspectiva (Yo, Compañeros, Equipo). Están escritos a mano en el HTML;
+                             script.js no los crea, pero en cada clic mueve la clase "active" al punto de la
+                             perspectiva actual -->
                         <div class="card-dots">
-                            <span class="card-dot active"></span><span class="card-dot"></span><span class="card-dot"></span>
+                            <span class="card-dot active"></span><span class="card-dot"></span><span
+                                class="card-dot"></span>
                         </div>
                         <!-- Pista de interacción. Pendiente: que script.js la atenúe después del primer clic -->
                         <p class="card-hint">Pulsa para cambiar</p>
@@ -162,13 +184,14 @@
                             <p id="metric-income-tag" class="metric-state">· Yo</p>
                         </div>
                         <p id="metric-income" class="metric-value">12$</p>
-                        <!-- Pie fijo; status-neutral lo pinta de azul -->
+                        <!-- Pie provisional (texto escrito a mano); status-neutral lo pinta de azul. Pendiente: pie calculado como el de Pedidos -->
                         <span class="metric-change status-neutral">Cliente + local</span>
                     </div>
 
                     <div class="card-control">
                         <div class="card-dots">
-                            <span class="card-dot active"></span><span class="card-dot"></span><span class="card-dot"></span>
+                            <span class="card-dot active"></span><span class="card-dot"></span><span
+                                class="card-dot"></span>
                         </div>
                         <p class="card-hint">Pulsa para cambiar</p>
                     </div>
@@ -185,26 +208,28 @@
                     <div class="card-data">
                         <div class="card-title-tag">
 
-                            <h3 class="metric-title">Promedio Dia</h3>
+                            <h3 class="metric-title">Promedio Día</h3>
                             <p id="metric-average-tag" class="metric-state">· Yo</p>
 
                         </div>
                         <p id="metric-average" class="metric-value">5.13$</p>
-                        <!-- Pie fijo; status-danger lo pinta de rojo -->
+                        <!-- Pie provisional (texto escrito a mano); status-danger lo pinta de rojo. Pendiente: pie calculado como el de Pedidos -->
                         <span class="metric-change status-danger">Promedio</span>
                     </div>
 
                     <div class="card-control">
                         <div class="card-dots">
-                            <span class="card-dot active"></span><span class="card-dot"></span><span class="card-dot"></span>
+                            <span class="card-dot active"></span><span class="card-dot"></span><span
+                                class="card-dot"></span>
                         </div>
                         <p class="card-hint">Pulsa para cambiar</p>
                     </div>
                 </div>
 
-                <!-- Tarjeta Promedio Semana: marcador de posición. script.js le agrega el listener de clic
-                     (porque tiene la clase metric-card), pero no escribe nada en #metric-average-week:
-                     su valor "P/D" (pendiente) y su texto son fijos -->
+                <!-- Tarjeta Promedio Semana: marcador de posición. Como tiene la clase metric-card, recibe el listener de clic:
+                     al pulsarla sí cambian su perspectiva, su etiqueta y sus puntos, pero script.js no calcula
+                     su valor, así que "P/D" (pendiente) no cambia. Falta tener datos de la semana
+                     (por ahora "pedidos" solo guarda un día) -->
                 <div id="card-average-week" class="metric-card" data-perspectiva="user">
 
                     <svg class="icono-dedito" width="18.5" height="18.5" aria-hidden="true">
@@ -217,12 +242,14 @@
                             <p id="metric-average-week-tag" class="metric-state">· Yo</p>
                         </div>
                         <p id="metric-average-week" class="metric-value">P/D</p>
+                        <!-- Pie provisional (texto escrito a mano) -->
                         <span class="metric-change status-neutral">Acumulado(2dias)</span>
                     </div>
 
                     <div class="card-control">
                         <div class="card-dots">
-                            <span class="card-dot active"></span><span class="card-dot"></span><span class="card-dot"></span>
+                            <span class="card-dot active"></span><span class="card-dot"></span><span
+                                class="card-dot"></span>
                         </div>
                         <p class="card-hint">Pulsa para cambiar</p>
                     </div>
@@ -238,7 +265,9 @@
                     <!-- Cabecera: título a la izquierda y fecha a la derecha -->
                     <div id="deliveries-day-table" class="table-card-header">
                         <h3>Detalle de Carreras de Hoy</h3>
-                        <!-- Fecha escrita a mano: script.js no la genera ni la modifica -->
+                        <!-- TODO: esta fecha está escrita a mano y no se actualiza sola. Cuando script.js genere la fecha de hoy
+                             habrá que cambiar este texto y revisar lo que dependa de ella (por ejemplo, filtrar los
+                             pedidos por día y la vista Semana) -->
                         <strong id="current-date">15 Oct 2026</strong>
                     </div>
 
@@ -280,15 +309,15 @@
                         <p id="them-orders" class="metric-value">8</p>
                         <span id="them-income" class="metric-change status-success">30$ acumulados</span>
                     </div>
-                    <!-- Botón reservado: script.js no lo referencia, por ahora no hace nada (según el plan del proyecto, abrirá el formulario de nuevo pedido) -->
+                    <!-- Botón reservado: script.js no lo usa (no hace nada al pulsarlo). Pendiente: formulario de nuevo pedido -->
                     <button class="basic-button" id="add-delivery-button">Agregar Pedido</button>
                 </div>
             </div>
         </section>
 
         <!-- ========== VISTA SEMANA (id "view-week") ==========
-             Todo el contenido de esta vista es estático por ahora: script.js no usa ningún elemento de aquí dentro,
-             salvo la clase "view-section" de la sección completa -->
+             Todo el contenido de esta vista es estático (datos de ejemplo): script.js no usa ningún elemento de aquí
+             dentro, salvo la clase "view-section" de la sección completa -->
         <section id="view-week" class="view-section">
 
             <!-- Tarjeta con título y barra de controles para elegir la semana -->
@@ -303,7 +332,7 @@
                 <div class="week-control-bar">
                     <!-- Navegación entre semanas: anterior, actual y siguiente -->
                     <div class="week-nav-group">
-                        <!-- Botones reservados: tienen id pero script.js todavía no les asigna ninguna función (title es el texto que aparece al pasar el cursor) -->
+                        <!-- Botones reservados: tienen id pero script.js no les asigna ninguna función (pendiente). title es el texto que aparece al pasar el cursor -->
                         <button class="w-control-btn" id="prev-week-button" title="Semana anterior">
                             <i class="fa-solid fa-chevron-left"></i>
                         </button>
@@ -337,7 +366,7 @@
             <div id="week-table-card" class="card">
                 <div id="deliveries-week-table" class="table-card-header">
                     <h3>Resumen Histórico por Semanas</h3>
-                    <!-- Texto fijo: script.js no lo modifica -->
+                    <!-- Texto de ejemplo escrito a mano: script.js no lo modifica -->
                     <strong id="current-week">Semana 42</strong>
                 </div>
 
@@ -386,7 +415,7 @@
         </section>
 
         <!-- ========== VISTA MES (id "view-month") ==========
-             Igual que la vista Semana: contenido estático por ahora, sin elementos usados por script.js
+             Igual que la vista Semana: contenido estático (datos de ejemplo), sin elementos usados por script.js
              salvo la clase "view-section" de la sección completa -->
         <section id="view-month" class="view-section">
 
@@ -403,7 +432,7 @@
                 <div class="month-control-bar">
                     <!-- Navegación entre meses: anterior, actual y siguiente -->
                     <div class="month-nav-group">
-                        <!-- Botones reservados: tienen id pero script.js todavía no les asigna ninguna función -->
+                        <!-- Botones reservados: tienen id pero script.js no les asigna ninguna función (pendiente) -->
                         <button class="month-control-btn" id="prev-month-button" title="Mes anterior">
                             <i class="fa-solid fa-chevron-left"></i>
                         </button>
@@ -437,7 +466,7 @@
             <div id="month-table-card" class="card">
                 <div id="deliveries-month-table" class="table-card-header">
                     <h3>Resumen Histórico por Meses</h3>
-                    <!-- Texto fijo: script.js no lo modifica -->
+                    <!-- Texto de ejemplo escrito a mano: script.js no lo modifica -->
                     <strong id="current-month">2026</strong>
                 </div>
 
