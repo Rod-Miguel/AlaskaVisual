@@ -327,12 +327,11 @@ function pintarTarjeta(card) {
     let incomeToShow = 0;
     let averageToShow = 0;
 
-    // Pedidos e Ingresos son las tarjetas con pie calculado y anillo.
+    // Pedidos e Ingresos tienen pie calculado y anillo; Promedio Día tiene pie
+    // calculado sin anillo; Promedio Semana todavía no tiene rama (ver el final).
     if (card.id === "card-order") {
         const theRings = card.querySelector(".ring");
-        const footer = card.querySelector(".metric-change");
         const ringValue = theRings.querySelector(".ring-value");
-
         // Porcentaje de los pedidos del equipo que son míos (0 si no hay pedidos,
         // para no dividir entre 0). El anillo lo recibe en stroke-dasharray como
         // "pintado vacío": como el contorno mide 100 (pathLength="100" en el
@@ -343,6 +342,7 @@ function pintarTarjeta(card) {
         const emptyDasharray = 100 - percentage.toFixed(0);
         ringValue.setAttribute("stroke-dasharray", percentage.toFixed(0) + " " + emptyDasharray);
 
+        const footer = card.querySelector(".metric-change");
         // Texto del pie y su estado (color), que dependen de la perspectiva.
         let text;
         let status;
@@ -482,18 +482,81 @@ function pintarTarjeta(card) {
         totalIncome.textContent = incomeToShow;
 
     } else if (card.id === "card-average") {
-        // Operador ternario (condición ? A : B): si el grupo no tiene pedidos
-        // muestra "Sin pedidos" y, si los tiene, el promedio formateado. Así se
-        // evita mostrar un 0.00$ engañoso.
+        // Promedio Día: el valor es el promedio por pedido de la perspectiva actual
+        // y el pie compara MI promedio con otro. Sin anillo a propósito: un promedio
+        // no es una parte de un total, así que un porcentaje no tendría sentido.
+        //   · Yo: "Sin datos de ayer" (provisional, como en Pedidos)
+        //   · Compañeros: mi promedio menos el de los compañeros
+        //   · Equipo: mi promedio menos el de todo el equipo (yo incluido)
+        // Diferencia positiva = mi promedio es mayor (success); negativa = menor (danger).
+        const footer = card.querySelector(".metric-change");
+        // Texto del pie y su estado (color), que dependen de la perspectiva.
+        let text;
+        let status;
+
         if (card.dataset.perspectiva === "user") {
+            // Ternario (condición ? A : B): si el grupo no tiene pedidos muestra
+            // "Sin pedidos" y, si los tiene, el promedio con 2 decimales y "$".
             averageToShow = mineOrders === 0 ? "Sin pedidos" : mineAverage.toFixed(2) + "$";
+            text = "Sin datos de ayer";
+            status = "status-neutral";
         } else if (card.dataset.perspectiva === "coworkers") {
             averageToShow = themOrders === 0 ? "Sin pedidos" : themAverage.toFixed(2) + "$";
+            // Diferencia a mi favor (positiva) o en contra (negativa).
+            const difference = mineAverage - themAverage;
+
+            // Si yo o mis compañeros no tenemos pedidos, el promedio de ese grupo es
+            // un 0 de relleno (bloque 5), no un promedio real: restarlo daría una
+            // comparación falsa. Por eso esta revisión va antes que la resta.
+            if (mineOrders === 0 || themOrders === 0) {
+                text = "Sin comparación";
+                status = "status-neutral";
+            } else if (difference > 0) {
+                text = `Tú +${difference.toFixed(2)}` + "$";
+                status = "status-success";
+            } else if (difference < 0) {
+                // Primero Math.abs (número) y después toFixed (texto): al revés,
+                // Math.abs volvería a convertir el texto y se perderían los decimales.
+                text = `Tú −${Math.abs(difference).toFixed(2)}` + "$";
+                status = "status-danger";
+            } else {
+                text = "Parejos";
+                status = "status-neutral";
+            }
+
         } else if (card.dataset.perspectiva === "team") {
             averageToShow = teamOrders === 0 ? "Sin pedidos" : teamAverage.toFixed(2) + "$";
+            // Diferencia entre mi promedio y el del equipo completo.
+            const difference = mineAverage - teamAverage;
+
+            if (teamOrders === 0) {
+                text = "Sin pedidos";
+                status = "status-neutral";
+            } else if (mineOrders === 0 || themOrders === 0) {
+                // Sin pedidos míos, mi promedio es un 0 de relleno. Sin pedidos de
+                // los compañeros, el equipo soy solo yo: compararme conmigo mismo
+                // no dice nada.
+                text = "Sin comparación";
+                status = "status-neutral";
+            } else if (difference > 0) {
+                text = `Tú +${difference.toFixed(2)}` + "$";
+                status = "status-success";
+            } else if (difference < 0) {
+                text = `Tú −${Math.abs(difference).toFixed(2)}` + "$";
+                status = "status-danger";
+            } else {
+                text = "Parejos";
+                status = "status-neutral";
+            }
         }
+        // Se quitan los tres estados antes de poner el nuevo; si no, los colores
+        // de clics anteriores se acumularían.
+        footer.textContent = text;
+        footer.classList.remove("status-success", "status-neutral", "status-danger");
+        footer.classList.add(status);
         deliveriesAverage.textContent = averageToShow;
     }
+    
     // "card-average-week" no tiene rama a propósito: pedidos solo guarda un día,
     // así que todavía no hay datos de semana que mostrar. Esta tarjeta recibe el
     // listener de clic como las otras (por tener la clase "metric-card"), por

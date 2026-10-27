@@ -43,12 +43,12 @@ Primero todo funciona en el navegador guardando en `localStorage`. Después se m
   - [x] JS: función pintarTarjeta, que pinta al cargar y en cada clic
   - [ ] Pie con texto y colores
     - [x] Pedidos (Yo / Compañeros / Equipo)
-    - [ ] Ingresos
-    - [ ] Promedio Día
+    - [X] Ingresos
+    - [X] Promedio Día
     - [ ] Promedio Semana
-  - [ ] Anillo de porcentaje (SVG) en la perspectiva Equipo
+  - [X] Anillo de porcentaje (SVG) en la perspectiva Equipo
     - [x] Pedidos
-    - [ ] Ingresos
+    - [X] Ingresos
   - [ ] Pista que se atenúa
   - [ ] Selector de compañero (solo si hay más de dos)
   - [ ] Accesibilidad: tarjeta enfocable con teclado

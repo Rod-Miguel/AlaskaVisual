@@ -232,30 +232,53 @@
                 </div>
 
 
-                <!-- Tarjeta Promedio Día: id="card-average". Misma estructura; script.js escribe el valor en #metric-average ("5.13$" es relleno) -->
+                <!-- Tarjeta Promedio Día: id="card-average". Misma estructura que Pedidos e Ingresos;
+                     script.js escribe el valor en #metric-average (promedio por pedido, con 2 decimales y "$") -->
                 <div id="card-average" class="metric-card" data-perspectiva="user">
 
+                    <!-- Ícono del dedito: <use> dibuja el símbolo #icono-dedito del sprite del inicio del body.
+                         aria-hidden porque es decorativo. Su posición y su color gris están en styles.css (.icono-dedito) -->
                     <svg class="icono-dedito" width="18.5" height="18.5" aria-hidden="true">
                         <use href="#icono-dedito"></use>
                     </svg>
 
+                    <!-- GRUPO DE DATOS -->
                     <div class="card-data">
+                        <!-- Fila de título y etiqueta de perspectiva (se alinean en una línea con flex en styles.css).
+                             El texto "· Yo" es el inicial: en cada clic script.js lo reemplaza por
+                             "· Compañeros" o "· Equipo" (diccionario "etiquetas"). Su color lo toma
+                             styles.css de data-perspectiva -->
                         <div class="card-title-tag">
-
                             <h3 class="metric-title">Promedio Día</h3>
                             <p id="metric-average-tag" class="metric-state">· Yo</p>
-
                         </div>
-                        <p id="metric-average" class="metric-value">5.13$</p>
-                        <!-- Pie provisional (texto escrito a mano); status-danger lo pinta de rojo. Pendiente: pie calculado como el de Pedidos -->
-                        <span class="metric-change status-danger">Promedio</span>
+
+                        <!-- Vacío a propósito: script.js escribe aquí el promedio por pedido de la perspectiva
+                             actual (mío, de compañeros o del equipo) al cargar y al hacer clic -->
+                        <p id="metric-average" class="metric-value"></p>
+
+                        <!-- Pie de Promedio Día: script.js escribe el texto y el color de .metric-change
+                             (status-success / -danger / -neutral) según la perspectiva:
+                               · Yo: "Sin datos de ayer" (provisional, neutral)
+                               · Compañeros: "Tú +X$", "Tú −X$" o "Parejos" (mi promedio contra el de los compañeros)
+                               · Equipo: lo mismo, pero contra el promedio de todo el equipo
+                               · "Sin comparación" (neutral) si yo o los compañeros no tenemos pedidos
+                             Sin anillo a propósito: un promedio no es una parte de un total -->
+                        <div class="metric-footer">
+                            <span class="metric-change"></span>
+                        </div>
                     </div>
 
+                    <!-- GRUPO DE CONTROL -->
                     <div class="card-control">
+                        <!-- Puntos de ciclo: uno por perspectiva (Yo, Compañeros, Equipo). Están escritos a mano en el HTML;
+                             script.js no los crea, pero en cada clic mueve la clase "active" al punto de la
+                             perspectiva actual -->
                         <div class="card-dots">
                             <span class="card-dot active"></span><span class="card-dot"></span><span
                                 class="card-dot"></span>
                         </div>
+                        <!-- Pista de interacción. Pendiente: que script.js la atenúe después del primer clic -->
                         <p class="card-hint">Pulsa para cambiar</p>
                     </div>
                 </div>
