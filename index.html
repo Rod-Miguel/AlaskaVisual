@@ -171,32 +171,66 @@
 
                 </div>
 
-                <!-- Tarjeta Ingresos: id="card-income". Misma estructura que Pedidos; script.js escribe el valor en #metric-income ("12$" es relleno) -->
+                <!-- Tarjeta Ingresos: id="card-income". Misma estructura que Pedidos; script.js escribe el valor en #metric-income
+                     (dólares con 2 decimales y "$") -->
                 <div id="card-income" class="metric-card" data-perspectiva="user">
 
+                    <!-- Ícono del dedito: <use> dibuja el símbolo #icono-dedito del sprite del inicio del body.
+                         aria-hidden porque es decorativo. Su posición y su color gris están en styles.css (.icono-dedito) -->
                     <svg class="icono-dedito" width="18.5" height="18.5" aria-hidden="true">
                         <use href="#icono-dedito"></use>
                     </svg>
 
+                    <!-- GRUPO DE DATOS -->
                     <div class="card-data">
+                        <!-- Fila de título y etiqueta de perspectiva (se alinean en una línea con flex en styles.css).
+                             El texto "· Yo" es el inicial: en cada clic script.js lo reemplaza por
+                             "· Compañeros" o "· Equipo" (diccionario "etiquetas"). Su color lo toma
+                             styles.css de data-perspectiva -->
                         <div class="card-title-tag">
                             <h3 class="metric-title">Ingresos</h3>
                             <p id="metric-income-tag" class="metric-state">· Yo</p>
                         </div>
-                        <p id="metric-income" class="metric-value">12$</p>
-                        <!-- Pie provisional (texto escrito a mano); status-neutral lo pinta de azul. Pendiente: pie calculado como el de Pedidos -->
-                        <span class="metric-change status-neutral">Cliente + local</span>
+                        <!-- Vacío a propósito: script.js escribe aquí el ingreso de la perspectiva actual
+                             (mío, de compañeros o del equipo) al cargar y al hacer clic -->
+                        <p id="metric-income" class="metric-value"></p>
+                        <!-- Pie de Ingresos: script.js escribe el texto de .metric-change y su color
+                             (status-success / -danger / -neutral) según la perspectiva:
+                               · Yo: "Cliente + local" (neutral)
+                               · Compañeros: "Tú +X$" (success), "Tú −X$" (danger) o "Parejos" (neutral)
+                               · Equipo: "Tú N%" (mi parte del ingreso del equipo) o "Sin pedidos" (neutral) si el equipo no tiene ingresos.
+                                 El color es success si gano más que los compañeros, danger si gano menos, neutral si igual
+                             Anillo (SVG): muestra qué parte del ingreso del equipo es mía y solo se ve en la
+                             perspectiva "Equipo" (la clase "active" del <svg> la agrega script.js). Toma el mismo color que el pie.
+                             pathLength="100" hace que el contorno del círculo mida 100, así que en
+                             stroke-dasharray="10 90" el primer número es el tramo pintado (en %) y el segundo el
+                             vacío. "10 90" es solo el valor inicial: script.js lo reemplaza con tu porcentaje.
+                             rotate(-90) mueve el inicio del trazo de las 3 en punto a las 12 -->
+                        <div class="metric-footer">
+                            <svg class="ring" viewBox="0 0 100 100" aria-hidden="true">
+                                <circle class="ring-track" cx="50" cy="50" r="40" fill="none" stroke-width="20" />
+                                <circle class="ring-value" cx="50" cy="50" r="40" fill="none" stroke-width="20"
+                                    pathLength="100" stroke-dasharray="10 90" transform="rotate(-90 50 50)" />
+                            </svg>
+                            <span class="metric-change status-neutral"></span>
+                        </div>
+
                     </div>
 
+                    <!-- GRUPO DE CONTROL -->
                     <div class="card-control">
+                        <!-- Puntos de ciclo: uno por perspectiva (Yo, Compañeros, Equipo). Están escritos a mano en el HTML;
+                             script.js no los crea, pero en cada clic mueve la clase "active" al punto de la
+                             perspectiva actual -->
                         <div class="card-dots">
                             <span class="card-dot active"></span><span class="card-dot"></span><span
                                 class="card-dot"></span>
                         </div>
+                        <!-- Pista de interacción. Pendiente: que script.js la atenúe después del primer clic -->
                         <p class="card-hint">Pulsa para cambiar</p>
                     </div>
-
                 </div>
+
 
                 <!-- Tarjeta Promedio Día: id="card-average". Misma estructura; script.js escribe el valor en #metric-average ("5.13$" es relleno) -->
                 <div id="card-average" class="metric-card" data-perspectiva="user">

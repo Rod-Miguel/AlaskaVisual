@@ -103,26 +103,26 @@ const USUARIO_ACTUAL = "Miguel";
 // Solo se almacena lo que no se puede calcular: el total de cada carrera
 // se calcula cuando hace falta (aporteCliente + PAGO_RESTAURANTE).
 const pedidos = [
-  { hora: "08:15", aporteCliente: 3, repartidor: "Miguel" },
-  { hora: "09:00", aporteCliente: 5, repartidor: "Oliver" },
-  { hora: "09:45", aporteCliente: 2, repartidor: "Miguel" },
-  { hora: "10:30", aporteCliente: 4, repartidor: "Miguel" },
-  { hora: "11:10", aporteCliente: 6, repartidor: "Oliver" },
-  { hora: "12:00", aporteCliente: 3, repartidor: "Miguel" },
-  { hora: "12:50", aporteCliente: 5, repartidor: "Oliver" },
-  { hora: "13:30", aporteCliente: 2, repartidor: "Miguel" },
-  { hora: "14:15", aporteCliente: 4, repartidor: "Miguel" },
-  { hora: "15:00", aporteCliente: 3, repartidor: "Oliver" },
-  { hora: "16:20", aporteCliente: 5, repartidor: "Miguel" },
-  { hora: "17:10", aporteCliente: 2, repartidor: "Oliver" },
-  { hora: "18:25", aporteCliente: 6, repartidor: "Miguel" },
-  { hora: "19:15", aporteCliente: 3, repartidor: "Miguel" },
-  { hora: "20:00", aporteCliente: 4, repartidor: "Oliver" },
-  { hora: "20:45", aporteCliente: 5, repartidor: "Miguel" },
-  { hora: "21:30", aporteCliente: 2, repartidor: "Oliver" },
-  { hora: "22:10", aporteCliente: 4, repartidor: "Miguel" },
-  { hora: "22:50", aporteCliente: 3, repartidor: "Miguel" },
-  { hora: "23:20", aporteCliente: 5, repartidor: "Oliver" }
+    { hora: "08:15", aporteCliente: 3, repartidor: "Miguel" },
+    { hora: "09:00", aporteCliente: 5, repartidor: "Oliver" },
+    { hora: "09:45", aporteCliente: 2, repartidor: "Miguel" },
+    { hora: "10:30", aporteCliente: 4, repartidor: "Miguel" },
+    { hora: "11:10", aporteCliente: 6, repartidor: "Oliver" },
+    { hora: "12:00", aporteCliente: 3, repartidor: "Miguel" },
+    { hora: "12:50", aporteCliente: 5, repartidor: "Oliver" },
+    { hora: "13:30", aporteCliente: 2, repartidor: "Miguel" },
+    { hora: "14:15", aporteCliente: 4, repartidor: "Miguel" },
+    { hora: "15:00", aporteCliente: 3, repartidor: "Oliver" },
+    { hora: "16:20", aporteCliente: 5, repartidor: "Miguel" },
+    { hora: "17:10", aporteCliente: 2, repartidor: "Oliver" },
+    { hora: "18:25", aporteCliente: 6, repartidor: "Miguel" },
+    { hora: "19:15", aporteCliente: 3, repartidor: "Miguel" },
+    { hora: "20:00", aporteCliente: 4, repartidor: "Oliver" },
+    { hora: "20:45", aporteCliente: 5, repartidor: "Miguel" },
+    { hora: "21:30", aporteCliente: 2, repartidor: "Oliver" },
+    { hora: "22:10", aporteCliente: 4, repartidor: "Miguel" },
+    { hora: "22:50", aporteCliente: 3, repartidor: "Miguel" },
+    { hora: "23:20", aporteCliente: 5, repartidor: "Oliver" }
 ];
 
 /* ============================================================
@@ -327,7 +327,7 @@ function pintarTarjeta(card) {
     let incomeToShow = 0;
     let averageToShow = 0;
 
-    // Pedidos es la única tarjeta con pie calculado y anillo.
+    // Pedidos e Ingresos son las tarjetas con pie calculado y anillo.
     if (card.id === "card-order") {
         const theRings = card.querySelector(".ring");
         const footer = card.querySelector(".metric-change");
@@ -406,14 +406,79 @@ function pintarTarjeta(card) {
         deliveriesAmount.textContent = ordersToShow;
 
     } else if (card.id === "card-income") {
-        // El valor ya se guarda formateado (texto con 2 decimales y "$").
+        const theRings = card.querySelector(".ring");
+        const footer = card.querySelector(".metric-change");
+        const ringValue = theRings.querySelector(".ring-value");
+
+        // Misma lógica que Pedidos, pero con dinero: porcentaje del ingreso del
+        // equipo que es mío (0 si el equipo no tiene ingresos, para no dividir
+        // entre 0; la condición y la división usan la misma variable, teamIncome).
+        // El anillo recibe "pintado vacío" en stroke-dasharray, igual que en Pedidos.
+        const percentage = teamIncome === 0 ? 0 : (mineIncome / teamIncome) * 100;
+        const emptyDasharray = 100 - percentage.toFixed(0);
+        ringValue.setAttribute("stroke-dasharray", percentage.toFixed(0) + " " + emptyDasharray);
+
+        // Texto del pie y su estado (color), que dependen de la perspectiva.
+        let text;
+        let status;
+
+        // Aquí se da formato al valor: toFixed(2) devuelve TEXTO con 2 decimales
+        // y se le pega "$". Por eso el formato va al final, después de calcular.
         if (card.dataset.perspectiva === "user") {
             incomeToShow = mineIncome.toFixed(2) + "$";
+            text = "Cliente + local";
+            status = "status-neutral";
         } else if (card.dataset.perspectiva === "coworkers") {
             incomeToShow = themIncome.toFixed(2) + "$";
+            // Diferencia a mi favor (positiva) o en contra (negativa).
+            const difference = mineIncome - themIncome;
+            if (difference > 0) {
+                text = `Tú +${difference.toFixed(2)}` + "$";
+                status = "status-success";
+            } else if (difference < 0) {
+                // Primero Math.abs (número) y después toFixed (texto): al revés,
+                // Math.abs volvería a convertir el texto y se perderían los decimales.
+                text = `Tú −${Math.abs(difference).toFixed(2)}` + "$";
+                status = "status-danger";
+            } else {
+                text = "Parejos";
+                status = "status-neutral";
+            }
         } else if (card.dataset.perspectiva === "team") {
             incomeToShow = teamIncome.toFixed(2) + "$";
+
+            if (teamIncome === 0) {
+                text = "Sin pedidos";
+                status = "status-neutral";
+            } else if (mineIncome > themIncome) {
+                text = `Tú ${percentage.toFixed(0)}%`;
+                status = "status-success";
+            } else if (mineIncome < themIncome) {
+                text = `Tú ${percentage.toFixed(0)}%`;
+                status = "status-danger";
+            } else {
+                text = `Tú ${percentage.toFixed(0)}%`;
+                status = "status-neutral";
+            }
+
         }
+        // Mismo patrón que Pedidos: se limpian los estados anteriores y se pone
+        // el nuevo en el pie y en el anillo.
+        footer.textContent = text;
+        footer.classList.remove("status-success", "status-neutral", "status-danger");
+        footer.classList.add(status);
+
+        ringValue.classList.remove("status-success", "status-neutral", "status-danger");
+        ringValue.classList.add(status);
+
+        // El anillo solo se muestra en la perspectiva "Equipo" (en styles.css,
+        // .ring sin "active" es display: none).
+        if (card.dataset.perspectiva === "team") {
+            theRings.classList.add("active");
+        } else {
+            theRings.classList.remove("active");
+        }
+
         totalIncome.textContent = incomeToShow;
 
     } else if (card.id === "card-average") {
