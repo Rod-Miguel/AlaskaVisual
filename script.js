@@ -297,9 +297,10 @@ if (teamOrders === 0) {
  * empieza en "user"). No existe una variable global compartida, así que
  * cambiar una tarjeta no afecta a las otras.
  *
- * Reparto de trabajo: el manejador de clic (al final del archivo) solo avanza
- * la perspectiva, la etiqueta y los puntos; pintarTarjeta escribe el valor,
- * el pie y el anillo según esa perspectiva.
+ * Reparto de trabajo: el manejador de clic (al final del archivo) avanza la
+ * perspectiva, la etiqueta y los puntos, y marca la tarjeta como pulsada
+ * (data-card-pressed, que atenúa la pista en styles.css); pintarTarjeta
+ * escribe el valor, el pie y el anillo según esa perspectiva.
  */
 
 // Orden del ciclo. Los textos deben coincidir con los valores de
@@ -431,7 +432,12 @@ function pintarTarjeta(card) {
         } else if (card.dataset.perspectiva === "coworkers") {
             incomeToShow = themIncome.toFixed(2) + "$";
             // Diferencia a mi favor (positiva) o en contra (negativa).
-            const difference = mineIncome - themIncome;
+            // toFixed(2) redondea a 2 decimales pero devuelve TEXTO; Number(...) lo vuelve
+            // a convertir en número para poder comparar con > y <. Así el signo se decide
+            // con el mismo valor que ve el usuario: una diferencia de 0.003 queda en 0 y
+            // cae en "Parejos", en vez de mostrar "Tú +0.00$" en verde. También absorbe
+            // los errores diminutos de los decimales (0.1 + 0.2 - 0.3 no da 0).
+            const difference = Number((mineIncome - themIncome).toFixed(2));
             if (difference > 0) {
                 text = `Tú +${difference.toFixed(2)}` + "$";
                 status = "status-success";
@@ -502,8 +508,10 @@ function pintarTarjeta(card) {
             status = "status-neutral";
         } else if (card.dataset.perspectiva === "coworkers") {
             averageToShow = themOrders === 0 ? "Sin pedidos" : themAverage.toFixed(2) + "$";
-            // Diferencia a mi favor (positiva) o en contra (negativa).
-            const difference = mineAverage - themAverage;
+            // Diferencia a mi favor (positiva) o en contra (negativa), redondeada a 2
+            // decimales y vuelta a número (mismo motivo que en Ingresos): el signo se
+            // decide con el valor que se muestra.
+            const difference = Number((mineAverage - themAverage).toFixed(2));
 
             // Si yo o mis compañeros no tenemos pedidos, el promedio de ese grupo es
             // un 0 de relleno (bloque 5), no un promedio real: restarlo daría una
@@ -526,9 +534,9 @@ function pintarTarjeta(card) {
 
         } else if (card.dataset.perspectiva === "team") {
             averageToShow = teamOrders === 0 ? "Sin pedidos" : teamAverage.toFixed(2) + "$";
-            // Diferencia entre mi promedio y el del equipo completo.
-            const difference = mineAverage - teamAverage;
-
+            // Diferencia entre mi promedio y el del equipo completo, redondeada a 2
+            // decimales y vuelta a número para que el signo coincida con lo que se muestra.
+            const difference = Number((mineAverage - teamAverage).toFixed(2));
             if (teamOrders === 0) {
                 text = "Sin pedidos";
                 status = "status-neutral";
@@ -556,7 +564,7 @@ function pintarTarjeta(card) {
         footer.classList.add(status);
         deliveriesAverage.textContent = averageToShow;
     }
-    
+
     // "card-average-week" no tiene rama a propósito: pedidos solo guarda un día,
     // así que todavía no hay datos de semana que mostrar. Esta tarjeta recibe el
     // listener de clic como las otras (por tener la clase "metric-card"), por
@@ -577,6 +585,12 @@ metricCards.forEach(function (card) {
         const siguientePerspectiva = perspectivas[siguientePosicion];
         // Se guarda la nueva perspectiva en la tarjeta: ese es su "estado".
         card.dataset.perspectiva = siguientePerspectiva;
+
+        // Marca la tarjeta como pulsada. Es un atributo aparte de data-perspectiva
+        // porque la perspectiva vuelve a "user" tras tres clics y no sirve para saber
+        // si la tarjeta ya se usó. Es texto ("true"): styles.css reacciona a él y
+        // atenúa la pista (.card-hint).
+        card.dataset.cardPressed = "true";
 
         const etiqueta = card.querySelector(".metric-state");
         etiqueta.textContent = etiquetas[siguientePerspectiva];

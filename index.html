@@ -165,7 +165,7 @@
                             <span class="card-dot active"></span><span class="card-dot"></span><span
                                 class="card-dot"></span>
                         </div>
-                        <!-- Pista de interacción. Pendiente: que script.js la atenúe después del primer clic -->
+                        <!-- Pista de interacción. En el primer clic script.js marca la tarjeta con data-card-pressed="true" y styles.css atenúa esta pista -->
                         <p class="card-hint">Pulsa para cambiar</p>
                     </div>
 
@@ -197,7 +197,8 @@
                         <!-- Pie de Ingresos: script.js escribe el texto de .metric-change y su color
                              (status-success / -danger / -neutral) según la perspectiva:
                                · Yo: "Cliente + local" (neutral)
-                               · Compañeros: "Tú +X$" (success), "Tú −X$" (danger) o "Parejos" (neutral)
+                               · Compañeros: "Tú +X$" (success), "Tú −X$" (danger) o "Parejos" (neutral).
+                                 La diferencia se redondea a 2 decimales antes de comparar: si da 0.00, también es "Parejos"
                                · Equipo: "Tú N%" (mi parte del ingreso del equipo) o "Sin pedidos" (neutral) si el equipo no tiene ingresos.
                                  El color es success si gano más que los compañeros, danger si gano menos, neutral si igual
                              Anillo (SVG): muestra qué parte del ingreso del equipo es mía y solo se ve en la
@@ -226,7 +227,7 @@
                             <span class="card-dot active"></span><span class="card-dot"></span><span
                                 class="card-dot"></span>
                         </div>
-                        <!-- Pista de interacción. Pendiente: que script.js la atenúe después del primer clic -->
+                        <!-- Pista de interacción. En el primer clic script.js marca la tarjeta con data-card-pressed="true" y styles.css atenúa esta pista -->
                         <p class="card-hint">Pulsa para cambiar</p>
                     </div>
                 </div>
@@ -262,6 +263,7 @@
                                · Yo: "Sin datos de ayer" (provisional, neutral)
                                · Compañeros: "Tú +X$", "Tú −X$" o "Parejos" (mi promedio contra el de los compañeros)
                                · Equipo: lo mismo, pero contra el promedio de todo el equipo
+                               · En ambas la diferencia se redondea a 2 decimales antes de comparar: si da 0.00, es "Parejos"
                                · "Sin comparación" (neutral) si yo o los compañeros no tenemos pedidos
                              Sin anillo a propósito: un promedio no es una parte de un total -->
                         <div class="metric-footer">
@@ -278,7 +280,7 @@
                             <span class="card-dot active"></span><span class="card-dot"></span><span
                                 class="card-dot"></span>
                         </div>
-                        <!-- Pista de interacción. Pendiente: que script.js la atenúe después del primer clic -->
+                        <!-- Pista de interacción. En el primer clic script.js marca la tarjeta con data-card-pressed="true" y styles.css atenúa esta pista -->
                         <p class="card-hint">Pulsa para cambiar</p>
                     </div>
                 </div>

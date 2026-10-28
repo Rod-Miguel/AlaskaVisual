@@ -49,7 +49,7 @@ Primero todo funciona en el navegador guardando en `localStorage`. Después se m
   - [X] Anillo de porcentaje (SVG) en la perspectiva Equipo
     - [x] Pedidos
     - [X] Ingresos
-  - [ ] Pista que se atenúa
+  - [X] Pista que se atenúa
   - [ ] Selector de compañero (solo si hay más de dos)
   - [ ] Accesibilidad: tarjeta enfocable con teclado
   - [ ] Móvil: dos columnas

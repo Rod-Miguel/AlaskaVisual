@@ -108,6 +108,9 @@
     --status-success: #10b981;
     --status-danger: #ef4444;
     --status-neutral: #3b82f6;
+
+    /* Color de las pistas cuando fueron presionadas */
+    --text-pressed: color-mix(in srgb, var(--text-secondary)25%, transparent);
 }
 
 /* Tema oscuro. El selector [data-theme="dark"] coincide con la etiqueta <html>
@@ -679,11 +682,23 @@ tbody tr:hover {
     background-color: var(--persp-color);
 }
 
-/* Pista "Pulsa para cambiar": texto pequeño, gris y pegado a la derecha */
+/* Pista "Pulsa para cambiar": texto pequeño, gris y pegado a la derecha.
+   transition anima el cambio de color cuando se atenúa (175ms, igual que el
+   resto de la tarjeta) */
 .card-hint {
     font-size: 0.57rem;
     color: var(--text-secondary);
     text-align: right;
+    transition: color 175ms;
+}
+
+/* Pista atenuada: script.js agrega data-card-pressed="true" a la tarjeta en su
+   primer clic y no lo quita nunca. Se lee: la .card-hint dentro de una
+   .metric-card que tenga ese atributo. Una sola regla sirve para las cuatro
+   tarjetas y las tres perspectivas. Gana a .card-hint por especificidad
+   (dos clases y un atributo contra una clase), no por su posición en el archivo */
+.metric-card[data-card-pressed="true"] .card-hint {
+    color: var(--text-pressed);
 }
 
 /* Grupo de control: puntos y pista apilados. La tarjeta centra a sus hijos
