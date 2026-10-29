@@ -103,20 +103,22 @@
         <section id="view-day" class="view-section active">
 
             <!-- Cuadrícula de 4 tarjetas de métricas (4 columnas en escritorio, 2 en tablet, 1 en celular).
-                 Cada .metric-card tiene un listener de clic en script.js y un atributo data-perspectiva
-                 que guarda su perspectiva actual ("user" = mis datos, "coworkers" = compañeros, "team" = equipo).
+                 Cada .metric-card tiene en script.js un listener de clic y otro de teclado (Enter y Espacio),
+                 y un atributo data-perspectiva que guarda su perspectiva actual
+                 ("user" = mis datos, "coworkers" = compañeros, "team" = equipo).
+                 tabindex="0" hace que el teclado pueda enfocar cada tarjeta con Tab (un div no es enfocable por defecto);
+                 el anillo de foco está en styles.css (.metric-card:focus-visible).
                  Como cada tarjeta guarda su propia perspectiva, funcionan de forma independiente.
-                 Al cargar y en cada clic, la función pintarTarjeta de script.js escribe el valor de la tarjeta
+                 Al cargar y cada vez que se activa una tarjeta, la función pintarTarjeta de script.js escribe el valor
                  según su perspectiva: lo que hay escrito aquí es solo relleno inicial -->
             <div class="metric-grid">
                 <!-- Tarjeta Pedidos: script.js la identifica por id="card-order" y escribe la cantidad en #metric-orders.
-                     Es la única con pie calculado y anillo (ver el pie más abajo).
                      Las 4 tarjetas tienen la misma estructura:
                        1. Ícono del dedito (posición absoluta, arriba a la derecha)
                        2. .card-data: grupo de datos (título con etiqueta, valor y pie)
                        3. .card-control: grupo de control (puntos de ciclo y pista)
                      El color de la etiqueta y del punto activo lo toma styles.css de data-perspectiva -->
-                <div id="card-order" class="metric-card" data-perspectiva="user">
+                <div id="card-order" class="metric-card" data-perspectiva="user" tabindex="0">
 
                     <!-- Ícono del dedito: <use> dibuja el símbolo #icono-dedito del sprite del inicio del body.
                          aria-hidden porque es decorativo. Su posición y su color gris están en styles.css (.icono-dedito) -->
@@ -165,7 +167,7 @@
                             <span class="card-dot active"></span><span class="card-dot"></span><span
                                 class="card-dot"></span>
                         </div>
-                        <!-- Pista de interacción. En el primer clic script.js marca la tarjeta con data-card-pressed="true" y styles.css atenúa esta pista -->
+                        <!-- Pista de interacción. En la primera activación (clic o tecla) script.js marca la tarjeta con data-card-pressed="true" y styles.css atenúa esta pista -->
                         <p class="card-hint">Pulsa para cambiar</p>
                     </div>
 
@@ -173,7 +175,7 @@
 
                 <!-- Tarjeta Ingresos: id="card-income". Misma estructura que Pedidos; script.js escribe el valor en #metric-income
                      (dólares con 2 decimales y "$") -->
-                <div id="card-income" class="metric-card" data-perspectiva="user">
+                <div id="card-income" class="metric-card" data-perspectiva="user" tabindex="0">
 
                     <!-- Ícono del dedito: <use> dibuja el símbolo #icono-dedito del sprite del inicio del body.
                          aria-hidden porque es decorativo. Su posición y su color gris están en styles.css (.icono-dedito) -->
@@ -227,7 +229,7 @@
                             <span class="card-dot active"></span><span class="card-dot"></span><span
                                 class="card-dot"></span>
                         </div>
-                        <!-- Pista de interacción. En el primer clic script.js marca la tarjeta con data-card-pressed="true" y styles.css atenúa esta pista -->
+                        <!-- Pista de interacción. En la primera activación (clic o tecla) script.js marca la tarjeta con data-card-pressed="true" y styles.css atenúa esta pista -->
                         <p class="card-hint">Pulsa para cambiar</p>
                     </div>
                 </div>
@@ -235,7 +237,7 @@
 
                 <!-- Tarjeta Promedio Día: id="card-average". Misma estructura que Pedidos e Ingresos;
                      script.js escribe el valor en #metric-average (promedio por pedido, con 2 decimales y "$") -->
-                <div id="card-average" class="metric-card" data-perspectiva="user">
+                <div id="card-average" class="metric-card" data-perspectiva="user" tabindex="0">
 
                     <!-- Ícono del dedito: <use> dibuja el símbolo #icono-dedito del sprite del inicio del body.
                          aria-hidden porque es decorativo. Su posición y su color gris están en styles.css (.icono-dedito) -->
@@ -280,16 +282,16 @@
                             <span class="card-dot active"></span><span class="card-dot"></span><span
                                 class="card-dot"></span>
                         </div>
-                        <!-- Pista de interacción. En el primer clic script.js marca la tarjeta con data-card-pressed="true" y styles.css atenúa esta pista -->
+                        <!-- Pista de interacción. En la primera activación (clic o tecla) script.js marca la tarjeta con data-card-pressed="true" y styles.css atenúa esta pista -->
                         <p class="card-hint">Pulsa para cambiar</p>
                     </div>
                 </div>
 
-                <!-- Tarjeta Promedio Semana: marcador de posición. Como tiene la clase metric-card, recibe el listener de clic:
-                     al pulsarla sí cambian su perspectiva, su etiqueta y sus puntos, pero script.js no calcula
+                <!-- Tarjeta Promedio Semana: marcador de posición. Como tiene la clase metric-card, recibe los listeners de clic y de teclado:
+                     al activarla sí cambian su perspectiva, su etiqueta y sus puntos, pero script.js no calcula
                      su valor, así que "P/D" (pendiente) no cambia. Falta tener datos de la semana
                      (por ahora "pedidos" solo guarda un día) -->
-                <div id="card-average-week" class="metric-card" data-perspectiva="user">
+                <div id="card-average-week" class="metric-card" data-perspectiva="user" tabindex="0">
 
                     <svg class="icono-dedito" width="18.5" height="18.5" aria-hidden="true">
                         <use href="#icono-dedito"></use>

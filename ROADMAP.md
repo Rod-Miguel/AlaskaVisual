@@ -51,8 +51,10 @@ Primero todo funciona en el navegador guardando en `localStorage`. Después se m
     - [X] Ingresos
   - [X] Pista que se atenúa
   - [ ] Selector de compañero (solo si hay más de dos)
-  - [ ] Accesibilidad: tarjeta enfocable con teclado
+  - [X] Accesibilidad: tarjeta enfocable con teclado
+  - [ ] Accesibilidad: anunciar la tarjeta como botón a lectores de pantalla (role="button")
   - [ ] Móvil: dos columnas
+  - [ ] Deslizar (swipe) en el celular para cambiar de perspectiva
 - [ ] 4. **Agregar pedido manual:** formulario en un modal; el pedido entra al arreglo y todo se recalcula
 - [ ] 5. **Editar y borrar:** botones por fila
 - [ ] 6. **Guardar en `localStorage`:** que al recargar no se pierda nada

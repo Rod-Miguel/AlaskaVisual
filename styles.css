@@ -607,8 +607,7 @@ tbody tr:hover {
     border-color: var(--persp-color);
 }
 
-/* Anillo para navegación con teclado. Hoy no se ve porque la tarjeta es un div y el
-   teclado no puede enfocarla; quedará lista cuando se haga enfocable */
+/* Anillo para navegación con teclado. */
 .metric-card:focus-visible {
     outline: 2px solid var(--persp-color);
     outline-offset: 2px;

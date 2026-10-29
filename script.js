@@ -571,42 +571,72 @@ function pintarTarjeta(card) {
     // eso al pulsarla sí cambian su perspectiva, su etiqueta y sus puntos,
     // pero su valor ("P/D") no cambia. Pendiente hasta tener datos semanales.
 }
+// Avanza una tarjeta a su siguiente perspectiva del ciclo (Yo -> Compañeros ->
+// Equipo -> Yo): guarda el nuevo estado, actualiza la etiqueta y los puntos, y
+// repinta el valor. Recibe la tarjeta como parámetro y la llaman tres sitios: el
+// clic, la tecla Enter y la tecla Espacio. Está fuera del forEach para existir
+// una sola vez en vez de crearse una copia por tarjeta.
+function changePerspective(card) {
+    // card.dataset.perspectiva lee el atributo data-perspectiva de la tarjeta.
+    // indexOf devuelve su posición en el ciclo (0, 1 o 2; -1 si no existe).
+    const posicionActual = perspectivas.indexOf(card.dataset.perspectiva);
+    // El operador % (resto) vuelve al inicio después de la última posición:
+    // (2 + 1) % 3 = 0.
+    const siguientePosicion = (posicionActual + 1) % perspectivas.length;
+    const siguientePerspectiva = perspectivas[siguientePosicion];
+    // Se guarda la nueva perspectiva en la tarjeta: ese es su "estado".
+    card.dataset.perspectiva = siguientePerspectiva;
 
-// Se recorre cada tarjeta para programar su clic (las 4 reciben el mismo
-// código, incluida la de Promedio Semana) y para pintarla una vez al cargar.
+    // Marca la tarjeta como pulsada. Es un atributo aparte de data-perspectiva
+    // porque la perspectiva vuelve a "user" tras tres clics y no sirve para saber
+    // si la tarjeta ya se usó. Es texto ("true"): styles.css reacciona a él y
+    // atenúa la pista (.card-hint).
+    card.dataset.cardPressed = "true";
+
+    const etiqueta = card.querySelector(".metric-state");
+    etiqueta.textContent = etiquetas[siguientePerspectiva];
+
+    // Los puntos de ciclo están escritos en el HTML (uno por perspectiva, en
+    // el mismo orden que "perspectivas"), por eso dots[siguientePosicion]
+    // es el punto de la nueva perspectiva.
+    const dots = card.querySelectorAll(".card-dot");
+    dots.forEach(function (dot) {
+        dot.classList.remove("active");
+    });
+    dots[siguientePosicion].classList.add("active");
+
+    pintarTarjeta(card);
+}
+
+// Se recorre cada tarjeta para programar su clic y su teclado (Enter y Espacio)
+// (las 4 reciben el mismo código, incluida la de Promedio Semana) y para
+// pintarla una vez al cargar.
 metricCards.forEach(function (card) {
     card.addEventListener("click", function () {
-        // card.dataset.perspectiva lee el atributo data-perspectiva de la tarjeta.
-        // indexOf devuelve su posición en el ciclo (0, 1 o 2; -1 si no existe).
-        const posicionActual = perspectivas.indexOf(card.dataset.perspectiva);
-        // El operador % (resto) vuelve al inicio después de la última posición:
-        // (2 + 1) % 3 = 0.
-        const siguientePosicion = (posicionActual + 1) % perspectivas.length;
-        const siguientePerspectiva = perspectivas[siguientePosicion];
-        // Se guarda la nueva perspectiva en la tarjeta: ese es su "estado".
-        card.dataset.perspectiva = siguientePerspectiva;
-
-        // Marca la tarjeta como pulsada. Es un atributo aparte de data-perspectiva
-        // porque la perspectiva vuelve a "user" tras tres clics y no sirve para saber
-        // si la tarjeta ya se usó. Es texto ("true"): styles.css reacciona a él y
-        // atenúa la pista (.card-hint).
-        card.dataset.cardPressed = "true";
-
-        const etiqueta = card.querySelector(".metric-state");
-        etiqueta.textContent = etiquetas[siguientePerspectiva];
-
-        // Los puntos de ciclo están escritos en el HTML (uno por perspectiva, en
-        // el mismo orden que "perspectivas"), por eso dots[siguientePosicion]
-        // es el punto de la nueva perspectiva.
-        const dots = card.querySelectorAll(".card-dot");
-        dots.forEach(function (dot) {
-            dot.classList.remove("active");
-        });
-        dots[siguientePosicion].classList.add("active");
-
-        pintarTarjeta(card);
+        changePerspective(card)
     });
 
+    // Una tarjeta es un div y el navegador no la activa con el teclado como haría con
+    // un <button>: tabindex="0" en el HTML solo permite enfocarla, por eso Enter y
+    // Espacio se programan aquí. El Espacio lleva preventDefault() porque por defecto
+    // scrollea la página; el Enter no hace nada por defecto en un div. !event.repeat
+    // ignora las repeticiones que el sistema envía al mantener la tecla pulsada: sin
+    // eso la tarjeta giraría sin parar. preventDefault() va fuera de ese if para que
+    // el Espacio mantenido tampoco scrollee.
+    
+    card.addEventListener("keydown", function (event) {
+        if (event.key === "Enter") {
+            if (!event.repeat) {
+                changePerspective(card)
+            }
+
+        } else if (event.key === " ") {
+            event.preventDefault()
+            if (!event.repeat) {
+                changePerspective(card)
+            }
+        }
+    })
     // Pintado inicial: sin esto las tarjetas mostrarían el relleno del HTML
     // ("12$", "5.13$"...) hasta el primer clic.
     pintarTarjeta(card);
